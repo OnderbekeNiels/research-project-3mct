@@ -23,6 +23,8 @@ intro: Onderzoek de beste aanpak om je GraphQL API te cachen. Denk aan de versch
     - categories
     - races
     - desciplines
+    ![image](https://user-images.githubusercontent.com/55786916/136651544-5a5379fb-8658-430d-9558-a2c30bdcba49.png)
+
 
 - wat is het nieuwe element (research)? Kies iets dat actueel in jouw domein is.
     Onderzoeken hoe je het beste gaat gaan cachen met een GraphQL API
