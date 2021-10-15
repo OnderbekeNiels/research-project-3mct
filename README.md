@@ -6,9 +6,20 @@
 
 intro: Svelte schept graag op over de minimalistische aanpak door de afwezigheid van een virtual DOM library. Maak een use-case en doe (diepgaand) onderzoek naar de painting, rendering, loading, layout, etc. en bekijk of je echt beter af bent met Svelte. Voor de start van deze vraag kan een gesprek met Martijn nuttig zijn.
 
-- wat ga je concreet maken? ("ik zal een een app bouwen in technologie x" is te vaag)
+- wat ga je concreet maken? 
+    - 2 Web applicaties die dezelfde webshop zullen zijn maar met een andere js framework, het ene in Svelte (zonder virtual dom) en het andere react (incl virtual dom). 
 - wat is het nieuwe element (research)? Kies iets dat actueel in jouw domein is.
+    - Svelte framework
+    - Opkomend JS "framework" om in te developpen
+    - Nog niet gezien in de lessen
 - welke technologie zal je gebruiken?  (frontend/backend/...)  
+    - Svelte.js
+    - React.js
+    - express.js backend 
+    - MySql db
+    - Google Light house
+
+**Onderzoeksvraag: Hoe groot is het verschil tussen Svelte (no v dom) vs React (v dom) in performance op mobile devices? Wat is het interresantste om te gaan gebruiken voor een interactie web applicatie zoals een webshop?**
 
 ### Caching in GraphQL
 
@@ -37,9 +48,4 @@ intro: Onderzoek de beste aanpak om je GraphQL API te cachen. Denk aan de versch
 
 **Onderzoeksvraag: Hoe kan ik het beste gaan cachen (Server & Client side) met GraphQL API en MySQL DB voor een wielerwedstrijd API. Welke performance impact hebben deze soorten caching bij veel requests?**
 
-### BACKUP choice:
-
-#### Wat is de status van Rust voor het bouwen van Web Applicaties
-
-intro: Rust is een taal die veel mensen zien als de opvolger van C/C++. Naast het gebruik in systeem programming zoals operating systems is het ook mogelijk om Rust te gebruiken voor het bouwen van web applicaties. De bedoeling van deze onderzoeksvraag is te kijken hoever deze technologie staat. Kan je een web app of API bouwen in Rust. Hoe zit het met dataaccess en security. Kan je deze applicatie vlot deployen en hosten.
 
