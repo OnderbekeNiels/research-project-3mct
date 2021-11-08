@@ -8,7 +8,7 @@ intro: Onderzoek de beste aanpak om je GraphQL API te cachen. Denk aan de versch
 
 Mogelijke databases:
  - https://data-xtractor.com/blog/data-modeling/test-databases/#Bank_Test_Database
- - 
+ - Artemis db uit het eerste jaar
 
 **handige link: https://www.apollographql.com/blog/backend/caching/graphql-caching-the-elephant-in-the-room/**
 
@@ -28,6 +28,5 @@ Mogelijke databases:
     - database: MySQL in Maria db
     - docker container 
 
-**Onderzoeksvraag: Hoe kan ik het beste gaan cachen (Server & Client side) met GraphQL API en MySQL DB voor een grote API met veel nesting. Welke performance impact hebben deze soorten caching bij veel requests?**
-
+**Onderzoeksvraag: Welke is de beste caching strategie met GraphQL voor een grote relationele database.**
 
