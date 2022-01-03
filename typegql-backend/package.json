@@ -12,7 +12,12 @@
   "dependencies": {
     "class-validator": "^0.13.2",
     "graphql": "^15.8.0",
+    "mssql": "^7.3.0",
     "reflect-metadata": "^0.1.13",
-    "type-graphql": "^1.1.1"
+    "type-graphql": "^1.1.1",
+    "typeorm": "^0.2.41"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.7"
   }
 }
