@@ -14,9 +14,13 @@ export class Badge {
   @Column("nvarchar", { name: "Name", length: 40 })
   name: string;
 
+  @Field(() => ID)
+  @Column()
+  userId: number;
+
   @Field(() => User)
   @ManyToOne(() => User, (u: User) => u.id)
-  @JoinColumn({ name: "userId" })
+  @JoinColumn({ name: "UserId" })
   user: User;
 
   @Field()

@@ -1,6 +1,8 @@
-
-import { Service, Inject } from "typedi";
-import { EntityRepository, EntityTarget, getRepository, Repository } from "typeorm";
+import { Service } from "typedi";
+import {
+  EntityRepository,
+  Repository,
+} from "typeorm";
 import { InjectRepository } from "typeorm-typedi-extensions";
 import { User } from "../entity/Users";
 
@@ -14,9 +16,7 @@ export class UserService {
 
   all = async () => {
     return await this.userRepository.find({
-      take: 5,
-      relations: ["badges"],
-      order: { id: "ASC" },
+      take: 15,
     });
   };
 }
