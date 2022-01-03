@@ -1,0 +1,11 @@
+{
+  "type": "mssql",
+  "host": "localhost",
+  "port": 1433,
+  "username": "sa",
+  "password": "Strong(!)Password",
+  "database": "StackOverflow",
+  "entities": ["src/entity/**/*.ts"],
+  "synchronize": true,
+  "extra": { "trustServerCertificate": true, "encrypted": false }
+}

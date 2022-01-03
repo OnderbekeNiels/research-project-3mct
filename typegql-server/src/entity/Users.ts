@@ -1,10 +1,11 @@
 import { Field, ID, ObjectType } from "type-graphql";
-import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Badge } from "./Badges";
 
 @Index("PK_Users_Id", ["id"], { unique: true })
 @ObjectType()
 @Entity("Users", { schema: "dbo" })
-export class Users {
+export class User {
   @Field(() => ID)
   @PrimaryGeneratedColumn({ type: "int", name: "Id" })
   id: number;
@@ -60,4 +61,8 @@ export class Users {
   @Field({ nullable: true })
   @Column("int", { name: "AccountId", nullable: true })
   accountId: number | null;
+
+  @Field(() => [Badge], { nullable: true })
+  @OneToMany(() => Badge, (b: Badge) => b.user)
+  users?: User[];
 }

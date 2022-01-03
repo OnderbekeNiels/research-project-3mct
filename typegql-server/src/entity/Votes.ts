@@ -4,7 +4,7 @@ import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
 @Index("PK_Votes_Id", ["id"], { unique: true })
 @ObjectType()
 @Entity("Votes", { schema: "dbo" })
-export class Votes {
+export class Vote {
   @Field(() => ID)
   @PrimaryGeneratedColumn({ type: "int", name: "Id" })
   id: number;
