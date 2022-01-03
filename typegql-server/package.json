@@ -17,7 +17,9 @@
     "mssql": "^7.3.0",
     "reflect-metadata": "^0.1.13",
     "type-graphql": "^1.1.1",
+    "typedi": "^0.10.0",
     "typeorm": "^0.2.41",
-    "typeorm-extension": "^1.0.2"
+    "typeorm-extension": "^1.0.2",
+    "typeorm-typedi-extensions": "^0.4.1"
   }
 }

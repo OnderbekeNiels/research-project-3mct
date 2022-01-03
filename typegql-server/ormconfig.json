@@ -6,6 +6,6 @@
   "password": "Strong(!)Password",
   "database": "StackOverflow",
   "entities": ["src/entity/**/*.ts"],
-  "synchronize": true,
+  "synchronize": false,
   "extra": { "trustServerCertificate": true, "encrypted": false }
 }

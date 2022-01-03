@@ -1,15 +1,22 @@
 
-import { EntityTarget, getRepository, Repository } from "typeorm";
+import { Service, Inject } from "typedi";
+import { EntityRepository, EntityTarget, getRepository, Repository } from "typeorm";
+import { InjectRepository } from "typeorm-typedi-extensions";
 import { User } from "../entity/Users";
 
-export class UserService {
-  public repository: Repository<User>;
+@EntityRepository(User)
+export class UserRepository extends Repository<User> {}
 
-  constructor() {
-    this.repository = getRepository(User);
-  }
+@Service()
+export class UserService {
+  @InjectRepository(UserRepository)
+  private readonly userRepository: UserRepository;
 
   all = async () => {
-    return await this.repository.find();
+    return await this.userRepository.find({
+      take: 5,
+      relations: ["badges"],
+      order: { id: "ASC" },
+    });
   };
 }

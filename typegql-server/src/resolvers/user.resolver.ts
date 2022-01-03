@@ -1,12 +1,15 @@
-import { Query, Resolver } from "type-graphql";
+import { FieldResolver, Query, Resolver, Root } from "type-graphql";
+import { Service } from "typedi";
 import { User } from "../entity/Users";
 import { UserService } from "../services/user.service";
 
-@Resolver()
+@Service()
+@Resolver(() => User)
 export class UserResolver {
+  constructor(private readonly userService: UserService) {}
+
   @Query(() => [User])
   async GetAllUsers() {
-    const userService = new UserService();
-    return await userService.all();
+    return await this.userService.all();
   }
 }

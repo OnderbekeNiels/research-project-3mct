@@ -64,5 +64,5 @@ export class User {
 
   @Field(() => [Badge], { nullable: true })
   @OneToMany(() => Badge, (b: Badge) => b.user)
-  users?: User[];
+  badges?: Badge[];
 }
