@@ -14,9 +14,9 @@ export class UserService {
   @InjectRepository(UserRepository)
   private readonly userRepository: UserRepository;
 
-  all = async () => {
+  async all() {
     return await this.userRepository.find({
-      take: 15,
+      take: 2,
     });
-  };
+  }
 }

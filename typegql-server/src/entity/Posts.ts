@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from "type-graphql";
-import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Comment } from "./Comments";
 
 @Index("PK_Posts_Id", ["id"], { unique: true })
 @ObjectType()
@@ -87,4 +88,8 @@ export class Post {
   @Field()
   @Column("int", { name: "ViewCount" })
   viewCount: number;
+
+  @Field(() => [Comment], { nullable: true })
+  @OneToMany(() => Comment, (c: Comment) => c.post, { nullable: true })
+  comments?: Comment[];
 }

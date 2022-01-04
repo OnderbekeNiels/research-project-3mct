@@ -9,23 +9,24 @@ export class BadgeRepository extends Repository<Badge> {}
 @Service()
 export class BadgeService {
   @InjectRepository(BadgeRepository)
-  private readonly BadgeRepository: BadgeRepository;
+  private readonly badgeRepository: BadgeRepository;
 
   async all() {
-    return await this.BadgeRepository.find({
+    return await this.badgeRepository.find({
       take: 15,
     });
   }
 
   async findById(id: number) {
-    return await this.BadgeRepository.findOne({
+    return await this.badgeRepository.findOne({
       id: id,
     });
   }
 
   async findAllByUserId(id: number) {
-    return await this.BadgeRepository.find({
-      userId: id,
+    return await this.badgeRepository.find({
+      take: 5,
+      where: [{ userId: id }],
     });
   }
 }

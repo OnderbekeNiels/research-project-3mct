@@ -9,5 +9,5 @@ services:
     env_file:
       - .env
     volumes: 
-      - ./../stackoverflow-large:/var/opt/mssql/data
+      - ./../stackoverflow-small:/var/opt/mssql/data
 

@@ -1,6 +1,7 @@
 import { Field, ID, ObjectType } from "type-graphql";
 import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Badge } from "./Badges";
+import { Comment } from "./Comments";
 
 @Index("PK_Users_Id", ["id"], { unique: true })
 @ObjectType()
@@ -63,6 +64,10 @@ export class User {
   accountId: number | null;
 
   @Field(() => [Badge], { nullable: true })
-  @OneToMany(() => Badge, (b: Badge) => b.user)
+  @OneToMany(() => Badge, (b: Badge) => b.user, { nullable: true })
   badges?: Badge[];
+
+  @Field(() => [Comment], { nullable: true })
+  @OneToMany(() => Comment, (c: Comment) => c.user, { nullable: true })
+  comments?: Comment[];
 }
