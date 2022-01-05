@@ -6,6 +6,7 @@ import { BadgeService } from "../services/badge.service";
 import { CommentService } from "../services/comment.service";
 import { PostService } from "../services/posts.service";
 import { UserService } from "../services/user.service";
+import { CacheControl } from "../cache-control";
 
 @Service()
 @Resolver(() => User)
@@ -13,7 +14,7 @@ export class UserResolver {
   constructor(
     private readonly userService: UserService,
     private readonly badgeService: BadgeService,
-    private readonly commentService: CommentService,
+    private readonly commentService: CommentService
   ) {}
 
   @Query(() => [User])
@@ -28,7 +29,6 @@ export class UserResolver {
 
   @FieldResolver()
   async comments(@Root() user: User) {
-    return await this.commentService.findAllByArgs({userId: user.id});
+    return await this.commentService.findAllByArgs({ userId: user.id });
   }
-
 }

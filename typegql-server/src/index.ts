@@ -1,45 +1,88 @@
 import "reflect-metadata";
-import { ApolloServer } from "apollo-server-express";
+import { ApolloServer, gql } from "apollo-server-express";
 import * as Express from "express";
 import { buildSchema, Resolver, Query } from "type-graphql";
 import {
   ConnectionOptions,
   createConnection,
   getConnectionOptions,
+  getRepository,
   useContainer,
 } from "typeorm";
 import { UserResolver } from "./resolvers/user.resolver";
 import { Container } from "typedi";
 import { CommentResolver } from "./resolvers/comment.resolver";
 import { PostResolver } from "./resolvers/post.resolver";
+import responseCachePlugin from "apollo-server-plugin-response-cache";
+import { User } from "./entity/Users";
+import { ApolloServerPluginCacheControl } from "apollo-server-core";
 
-@Resolver()
-class HelloResolver {
-  @Query(() => String)
-  async helloWorld() {
-    return "Hello World!";
-  }
-}
 
 useContainer(Container);
 
 (async () => {
   const connectionOptions: ConnectionOptions = await getConnectionOptions();
   createConnection();
-  // console.log({connectionOptions})
 
-  // // Create the database before we make the connection. This will also add the tables
-  // createDatabase({ ifNotExist: true }, connectionOptions)
-  // .then(() => console.log("Database has been created!"))
-  // .then(createConnection)
-  // .then(async () => {
+  // Schema definition
+  // const typeDefs = gql`
+  //   enum CacheControlScope {
+  //     PUBLIC
+  //     PRIVATE
+  //   }
 
+  //   directive @cacheControl(
+  //     maxAge: Int
+  //     scope: CacheControlScope
+  //     inheritMaxAge: Boolean
+  //   ) on FIELD_DEFINITION | OBJECT | INTERFACE | UNION
+
+  //   type User @cacheControl(maxAge: 30) {
+  //     id: ID!
+  //     displayName: String
+  //     location: String
+  //   }
+
+  //   type Query {
+  //     user: User
+  //   }
+  // `;
+
+  
+  // // Resolver map
+  // const resolvers = {
+  //   Query: {
+  //     user(_, { id }, ctx, info) {
+  //       const repository = getRepository(User);
+  //       info.cacheControl.setCacheHint({ maxAge: 20, scope: "PUBLIC" });
+  //       return repository.findOne(2);
+  //     },
+  //   },
+  // };
+
+  // ! Type gql way
   const schema = await buildSchema({
-    resolvers: [HelloResolver, UserResolver, CommentResolver, PostResolver],
-    container: Container
+    resolvers: [UserResolver, CommentResolver, PostResolver],
+    container: Container,
   });
 
-  const apolloServer = new ApolloServer({ schema });
+  const apolloServer = new ApolloServer({
+    schema
+  });
+
+  // ! Blank apollo express way
+    // const apolloServer = new ApolloServer({
+    //   typeDefs,
+    //   resolvers,
+    //   plugins: [
+    //     ApolloServerPluginCacheControl({
+    //       // Cache everything for 0 second by default.
+    //       defaultMaxAge: 10,
+    //       // Don't send the `cache-control` response header.
+    //       calculateHttpHeaders: false,
+    //     }),
+    //   ],
+    // });
 
   const app = Express();
 
