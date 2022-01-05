@@ -10,6 +10,8 @@ import {
 } from "typeorm";
 import { UserResolver } from "./resolvers/user.resolver";
 import { Container } from "typedi";
+import { CommentResolver } from "./resolvers/comment.resolver";
+import { PostResolver } from "./resolvers/post.resolver";
 
 @Resolver()
 class HelloResolver {
@@ -33,7 +35,7 @@ useContainer(Container);
   // .then(async () => {
 
   const schema = await buildSchema({
-    resolvers: [HelloResolver, UserResolver],
+    resolvers: [HelloResolver, UserResolver, CommentResolver, PostResolver],
     container: Container
   });
 

@@ -23,11 +23,7 @@ export class CommentService {
     });
   }
 
-  async findAllByUserId(id: number) {
-     return await this.commentRepository.find({
-       take: 5,
-       where: [{ userId: id }],
-       relations:["post"]
-     });
+  async findAllByArgs(args: {}) {
+    return await this.commentRepository.find(args);
   }
 }

@@ -23,10 +23,7 @@ export class BadgeService {
     });
   }
 
-  async findAllByUserId(id: number) {
-    return await this.badgeRepository.find({
-      take: 5,
-      where: [{ userId: id }],
-    });
+  async findAllByArgs(args: {}) {
+    return await this.badgeRepository.find(args);
   }
 }
