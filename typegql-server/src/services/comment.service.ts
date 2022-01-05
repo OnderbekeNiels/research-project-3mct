@@ -27,6 +27,7 @@ export class CommentService {
      return await this.commentRepository.find({
        take: 5,
        where: [{ userId: id }],
+       relations:["post"]
      });
   }
 }

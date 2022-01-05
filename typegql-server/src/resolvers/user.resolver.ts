@@ -28,4 +28,9 @@ export class UserResolver {
   async comments(@Root() user: User) {
     return await this.commentService.findAllByUserId(user.id);
   }
+
+  // @FieldResolver()
+  // async comments(@Root() user: User) {
+  //   return await this.commentService.findAllByUserId(user.id);
+  // }
 }
