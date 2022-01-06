@@ -7,6 +7,7 @@ import { CommentService } from "../services/comment.service";
 import { PostService } from "../services/posts.service";
 import { UserService } from "../services/user.service";
 import { CacheControl } from "../cache-control";
+import { checkCache } from "../utils/redis";
 
 @Service()
 @Resolver(() => User)
@@ -19,8 +20,10 @@ export class UserResolver {
 
   @Query(() => [User])
   async UsersAll(@Ctx() ctx: any) {
-    console.log({ ctx });
-    return await this.userService.all();
+    const users = await checkCache(ctx.redisClient, "allusers", 60, async () => {
+      return await this.userService.all();
+    })
+    return users;
   }
 
   @FieldResolver()
