@@ -17,7 +17,7 @@ import responseCachePlugin from "apollo-server-plugin-response-cache";
 import { User } from "./entity/Users";
 import { ApolloServerPluginCacheControl } from "apollo-server-core";
 import { BaseRedisCache } from "apollo-server-cache-redis";
-import Redis from "ioredis"
+const Redis = require('ioredis');
 
 
 useContainer(Container);
@@ -46,7 +46,7 @@ useContainer(Container);
   //   }
 
   //   type Query {
-  //     user: User
+  //     UsersAll: [User]
   //   }
   // `;
 
@@ -54,10 +54,13 @@ useContainer(Container);
   // // Resolver map
   // const resolvers = {
   //   Query: {
-  //     user(_, { id }, ctx, info) {
+  //     UsersAll(_: any, { id }: any, ctx: any, info: any) {
+  //         console.log({ _ });
+  //       console.log({ctx})
+  //       console.log({ info });
   //       const repository = getRepository(User);
-  //       info.cacheControl.setCacheHint({ maxAge: 20, scope: "PUBLIC" });
-  //       return repository.findOne(2);
+  //       // info.cacheControl.setCacheHint({ maxAge: 20, scope: "PUBLIC" });
+  //       return repository.find({take: 2});
   //     },
   //   },
   // };
@@ -68,14 +71,25 @@ useContainer(Container);
     container: Container,
   });
 
+  // todo: redis password as env
   const apolloServer = new ApolloServer({
     schema,
-    cache: new BaseRedisCache({
-    client: new Redis({
-      host: 'redis-server',
-    }),
-  }),
+    context:{
+      redisClient: new Redis({
+        password: "mqsdfhmjkjKJFapaekrJqq",
+      }),
+    },
   });
+
+    // const apolloServer = new ApolloServer({
+    //   typeDefs,
+    //   resolvers,
+    //   cache: new BaseRedisCache({
+    //     client: new Redis({
+    //       password: "mqsdfhmjkjKJFapaekrJqq",
+    //     }),
+    //   }),
+    // });
 
   // ! Blank apollo express way
     // const apolloServer = new ApolloServer({

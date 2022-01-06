@@ -25,5 +25,8 @@
     "typeorm": "^0.2.41",
     "typeorm-extension": "^1.0.2",
     "typeorm-typedi-extensions": "^0.4.1"
+  },
+  "devDependencies": {
+    "@types/ioredis": "^4.28.7"
   }
 }
