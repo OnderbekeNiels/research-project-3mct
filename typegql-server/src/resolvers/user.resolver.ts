@@ -1,4 +1,4 @@
-import { FieldResolver, Query, Resolver, Root } from "type-graphql";
+import { Ctx, FieldResolver, Query, Resolver, Root } from "type-graphql";
 import { Service } from "typedi";
 import { User } from "../entity/Users";
 import { Comment } from "../entity/Comments";
@@ -18,7 +18,8 @@ export class UserResolver {
   ) {}
 
   @Query(() => [User])
-  async UsersAll() {
+  async UsersAll(@Ctx() ctx: any) {
+    console.log({ ctx });
     return await this.userService.all();
   }
 

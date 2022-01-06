@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
 
-   sqlserver:
+  MSSQLServer:
     image: mcr.microsoft.com/mssql/server:2019-latest
     ports:
       - "1433:1433"
@@ -10,4 +10,13 @@ services:
       - .env
     volumes: 
       - ./../stackoverflow-small:/var/opt/mssql/data
+
+  redisServer:
+    image: redis:6.2.6
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --loglevel warning --requirepass mqsdfhmjkjKJFapaekrJqq
+    volumes: 
+      - ./redis-cache:/data
+
 

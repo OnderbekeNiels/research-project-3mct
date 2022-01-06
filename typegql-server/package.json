@@ -12,10 +12,12 @@
   "license": "ISC",
   "dependencies": {
     "apollo-cache-control": "^0.14.0",
+    "apollo-server-cache-redis": "^3.3.0",
     "apollo-server-express": "^3.6.1",
     "apollo-server-plugin-response-cache": "^3.5.0",
     "express": "^4.17.2",
     "graphql": "^15.8.0",
+    "ioredis": "^4.28.2",
     "mssql": "^7.3.0",
     "reflect-metadata": "^0.1.13",
     "type-graphql": "^1.1.1",

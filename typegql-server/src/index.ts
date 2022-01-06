@@ -16,6 +16,8 @@ import { PostResolver } from "./resolvers/post.resolver";
 import responseCachePlugin from "apollo-server-plugin-response-cache";
 import { User } from "./entity/Users";
 import { ApolloServerPluginCacheControl } from "apollo-server-core";
+import { BaseRedisCache } from "apollo-server-cache-redis";
+import Redis from "ioredis"
 
 
 useContainer(Container);
@@ -67,7 +69,12 @@ useContainer(Container);
   });
 
   const apolloServer = new ApolloServer({
-    schema
+    schema,
+    cache: new BaseRedisCache({
+    client: new Redis({
+      host: 'redis-server',
+    }),
+  }),
   });
 
   // ! Blank apollo express way
