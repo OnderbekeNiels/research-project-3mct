@@ -10,10 +10,10 @@ export const checkCache = async (
     redisClient.get(key, async (err, data) => {
       if (err) return reject(err);
       if (data != null) {
-        logger.info("read from cache");
+        // logger.info("read from cache");
         return resolve(JSON.parse(data));
       } else {
-        logger.info("read from db");
+        // logger.info("read from db");
         const newData = await callback();
         redisClient.setex(key, maxAge, JSON.stringify(newData));
         resolve(newData);

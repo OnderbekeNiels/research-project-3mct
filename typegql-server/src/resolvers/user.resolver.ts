@@ -18,17 +18,19 @@ export class UserResolver {
     private readonly commentService: CommentService
   ) {}
 
-  @Query(() => [User])
-  async UsersAll(@Ctx() ctx: any) {
-    return await this.userService.all();
-  }
+  ttlCache: number = 20;
+
+  // @Query(() => [User])
+  // async UsersAll(@Ctx() ctx: any) {
+  //   return await this.userService.all();
+  // }
 
   @Query(() => [User])
-  async UsersAllCache(@Ctx() ctx: any) {
+  async UsersAll(@Ctx() ctx: any) {
     const users = await checkCache(
       ctx.redisClient,
       "allusers",
-      30,
+      this.ttlCache,
       async () => {
         return await this.userService.all();
       }
@@ -41,11 +43,27 @@ export class UserResolver {
     return await this.badgeService.findAllByArgs({ userId: user.id });
   }
 
+  // @FieldResolver()
+  // async comments(@Root() user: User, @Ctx() ctx: any) {
+  //   return await await this.commentService.findAllByArgs({
+  //     userId: user.id,
+  //     take: 10,
+  //   });
+  // }
+
   @FieldResolver()
-  async comments(@Root() user: User) {
-    return await this.commentService.findAllByArgs({
-      userId: user.id,
-      take: 10,
-    });
+  async comments(@Root() user: User, @Ctx() ctx: any) {
+    const comments = await checkCache(
+      ctx.redisClient,
+      `comments-from-user-${user.id}`,
+      this.ttlCache,
+      async () => {
+        return await await this.commentService.findAllByArgs({
+          userId: user.id,
+          take: 10,
+        });
+      }
+    );
+    return comments;
   }
 }
