@@ -1,4 +1,5 @@
 import { Redis } from "ioredis";
+import { logger } from "./logger";
 export const checkCache = async (
   redisClient: Redis,
   key: string,
@@ -9,10 +10,10 @@ export const checkCache = async (
     redisClient.get(key, async (err, data) => {
       if (err) return reject(err);
       if (data != null) {
-        console.log("from cache");
+        logger.info("read from cache");
         return resolve(JSON.parse(data));
       } else {
-        console.log("from db");
+        logger.info("read from db");
         const newData = await callback();
         redisClient.setex(key, maxAge, JSON.stringify(newData));
         resolve(newData);

@@ -21,7 +21,7 @@ export class User {
 
   @Field()
   @Column("datetime", { name: "CreationDate" })
-  creationDate: Date;
+  creationDate: string;
 
   @Field()
   @Column("nvarchar", { name: "DisplayName", length: 40 })

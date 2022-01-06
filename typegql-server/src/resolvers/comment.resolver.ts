@@ -3,6 +3,7 @@ import { Service } from "typedi";
 import { Comment } from "../entity/Comments";
 import { CommentService } from "../services/comment.service";
 import { PostService } from "../services/posts.service";
+import { UserService } from "../services/user.service";
 
 
 @Service()
@@ -10,7 +11,8 @@ import { PostService } from "../services/posts.service";
 export class CommentResolver {
   constructor(
     private readonly postService: PostService,
-    private readonly commentService: CommentService
+    private readonly commentService: CommentService,
+    private readonly userService: UserService
   ) {}
 
   @Query(() => [Comment])
@@ -23,4 +25,8 @@ export class CommentResolver {
     return await this.postService.findById(comment.postId);
   }
 
+  @FieldResolver()
+  async user(@Root() comment: Comment) {
+    return await this.userService.findByArgs(comment.userId);
+  }
 }

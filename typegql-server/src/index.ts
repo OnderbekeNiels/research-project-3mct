@@ -17,8 +17,9 @@ import responseCachePlugin from "apollo-server-plugin-response-cache";
 import { User } from "./entity/Users";
 import { ApolloServerPluginCacheControl } from "apollo-server-core";
 import { BaseRedisCache } from "apollo-server-cache-redis";
-const Redis = require('ioredis');
-
+import { logger } from "./utils/logger";
+import { Response } from "express";
+const Redis = require("ioredis");
 
 useContainer(Container);
 
@@ -50,7 +51,6 @@ useContainer(Container);
   //   }
   // `;
 
-  
   // // Resolver map
   // const resolvers = {
   //   Query: {
@@ -74,38 +74,60 @@ useContainer(Container);
   // todo: redis password as env
   const apolloServer = new ApolloServer({
     schema,
-    context:{
-      redisClient: new Redis({
+    context: ({ req, res }) => ({ req, res, redisClient: new Redis({
         password: "mqsdfhmjkjKJFapaekrJqq",
-      }),
-    },
+      }) }),
   });
 
-    // const apolloServer = new ApolloServer({
-    //   typeDefs,
-    //   resolvers,
-    //   cache: new BaseRedisCache({
-    //     client: new Redis({
-    //       password: "mqsdfhmjkjKJFapaekrJqq",
-    //     }),
-    //   }),
-    // });
+  // const apolloServer = new ApolloServer({
+  //   typeDefs,
+  //   resolvers,
+  //   cache: new BaseRedisCache({
+  //     client: new Redis({
+  //       password: "mqsdfhmjkjKJFapaekrJqq",
+  //     }),
+  //   }),
+  // });
 
   // ! Blank apollo express way
-    // const apolloServer = new ApolloServer({
-    //   typeDefs,
-    //   resolvers,
-    //   plugins: [
-    //     ApolloServerPluginCacheControl({
-    //       // Cache everything for 0 second by default.
-    //       defaultMaxAge: 10,
-    //       // Don't send the `cache-control` response header.
-    //       calculateHttpHeaders: false,
-    //     }),
-    //   ],
-    // });
+  // const apolloServer = new ApolloServer({
+  //   typeDefs,
+  //   resolvers,
+  //   plugins: [
+  //     ApolloServerPluginCacheControl({
+  //       // Cache everything for 0 second by default.
+  //       defaultMaxAge: 10,
+  //       // Don't send the `cache-control` response header.
+  //       calculateHttpHeaders: false,
+  //     }),
+  //   ],
+  // });
 
+  // bron: https://gist.github.com/benawad/7abb41c179b050b476fdad4e5a561161
   const app = Express();
+  app.use("/graphql", (req, res, next) => {
+    const startHrTime = process.hrtime();
+
+    res.on("finish", () => {
+      if (
+        req.body &&
+        req.body.operationName &&
+        req.body.operationName != "IntrospectionQuery"
+      ) {
+        const elapsedHrTime = process.hrtime(startHrTime);
+        const elapsedTimeInMs =
+          elapsedHrTime[0] * 1000 + elapsedHrTime[1] / 1e6;
+        logger.info({
+          type: "timing",
+          name: req.body.operationName,
+          ms: elapsedTimeInMs,
+        });
+      }
+    });
+
+    next();
+  });
+
 
   await apolloServer.start();
   apolloServer.applyMiddleware({ app });

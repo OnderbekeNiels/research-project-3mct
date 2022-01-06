@@ -20,9 +20,19 @@ export class UserResolver {
 
   @Query(() => [User])
   async UsersAll(@Ctx() ctx: any) {
-    const users = await checkCache(ctx.redisClient, "allusers", 60, async () => {
-      return await this.userService.all();
-    })
+    return await this.userService.all();
+  }
+
+  @Query(() => [User])
+  async UsersAllCache(@Ctx() ctx: any) {
+    const users = await checkCache(
+      ctx.redisClient,
+      "allusers",
+      30,
+      async () => {
+        return await this.userService.all();
+      }
+    );
     return users;
   }
 
@@ -33,6 +43,9 @@ export class UserResolver {
 
   @FieldResolver()
   async comments(@Root() user: User) {
-    return await this.commentService.findAllByArgs({ userId: user.id });
+    return await this.commentService.findAllByArgs({
+      userId: user.id,
+      take: 10,
+    });
   }
 }

@@ -13,7 +13,7 @@ export class Comment {
 
   @Field()
   @Column("datetime", { name: "CreationDate" })
-  creationDate: Date;
+  creationDate: string;
 
   @Field()
   @Column("int", { name: "PostId" })
