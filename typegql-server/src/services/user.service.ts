@@ -16,7 +16,7 @@ export class UserService {
 
   async all() {
     return await this.userRepository.find({
-      take: 140,
+      take: 3,
     });
   }
 

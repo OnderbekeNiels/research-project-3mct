@@ -23,5 +23,7 @@ export class PostService {
     });
   }
 
-
+  async findAllByArgs(args: {}) {
+    return await this.postRepository.find(args);
+  }
 }

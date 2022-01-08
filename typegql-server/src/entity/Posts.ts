@@ -1,6 +1,7 @@
 import { Field, ID, ObjectType } from "type-graphql";
-import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Comment } from "./Comments";
+import { User } from "./Users";
 
 @Index("PK_Posts_Id", ["id"], { unique: true })
 @ObjectType()
@@ -64,6 +65,11 @@ export class Post {
   @Field({ nullable: true })
   @Column("int", { name: "OwnerUserId", nullable: true })
   ownerUserId: number | null;
+
+  @Field(() => User, { nullable: true })
+  @ManyToOne(() => User, (u: User) => u.id, { nullable: true })
+  @JoinColumn({ name: "OwnerUserId" })
+  ownerUser?: User;
 
   @Field({ nullable: true })
   @Column("int", { name: "ParentId", nullable: true })

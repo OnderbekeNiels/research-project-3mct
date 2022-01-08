@@ -16,7 +16,7 @@ export class CommentResolver {
     private readonly userService: UserService
   ) {}
 
-  ttlCache: number = 20;
+  ttlCache: number = 80;
 
   @Query(() => [Comment])
   async CommentsAll() {

@@ -15,10 +15,11 @@ export class UserResolver {
   constructor(
     private readonly userService: UserService,
     private readonly badgeService: BadgeService,
-    private readonly commentService: CommentService
+    private readonly commentService: CommentService,
+    private readonly postService: PostService
   ) {}
 
-  ttlCache: number = 20;
+  ttlCache: number = 80;
 
   // @Query(() => [User])
   // async UsersAll(@Ctx() ctx: any) {
@@ -38,10 +39,10 @@ export class UserResolver {
     return users;
   }
 
-  @FieldResolver()
-  async badges(@Root() user: User) {
-    return await this.badgeService.findAllByArgs({ userId: user.id });
-  }
+  // @FieldResolver()
+  // async badges(@Root() user: User) {
+  //   return await this.badgeService.findAllByArgs({ userId: user.id });
+  // }
 
   // @FieldResolver()
   // async comments(@Root() user: User, @Ctx() ctx: any) {
@@ -58,12 +59,36 @@ export class UserResolver {
       `comments-from-user-${user.id}`,
       this.ttlCache,
       async () => {
-        return await await this.commentService.findAllByArgs({
+        return await this.commentService.findAllByArgs({
           userId: user.id,
           take: 10,
         });
       }
     );
     return comments;
+  }
+
+  // @FieldResolver()
+  // async posts(@Root() user: User, @Ctx() ctx: any) {
+  //   return await await this.postService.findAllByArgs({
+  //     userId: user.id,
+  //     take: 10,
+  //   });
+  // }
+
+  @FieldResolver()
+  async posts(@Root() user: User, @Ctx() ctx: any) {
+    const posts = await checkCache(
+      ctx.redisClient,
+      `posts-from-user-${user.id}`,
+      this.ttlCache,
+      async () => {
+        return await this.postService.findAllByArgs({
+          userId: user.id,
+          take: 10,
+        });
+      }
+    );
+    return posts;
   }
 }
