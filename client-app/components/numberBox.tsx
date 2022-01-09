@@ -7,7 +7,7 @@ export interface numberBoxType{
 
 export default function numberBox({ value, description, bgColor, textColor }: numberBoxType) {
   return (
-    <div className={`p-2 w-14 min-h-[4.5rem] rounded-3xl h-full flex flex-col items-center justify-center text-${textColor} bg-${bgColor}`}>
+    <div className={`p-2 w-14 min-h-[4.5rem] rounded-3xl h-full flex flex-col items-center justify-center ${textColor} ${bgColor}`}>
       <p className="font-bold">{value}</p>
       <p className="text-xs font-thin">{description}</p>
     </div>
