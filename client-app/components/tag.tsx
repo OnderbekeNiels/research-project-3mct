@@ -7,6 +7,6 @@ export interface TagType{
 export default function Tag({tagName}: TagType) {
   return(
   <button className="p-2 bg-orange-50 rounded-md text-xs">
-    <p className="text-orange-600">{tagName}</p>
+    <p className="font-semibold text-orange-600">{tagName}</p>
   </button>)
 }

@@ -1,6 +1,6 @@
 export default function Header() {
   return (
-    <header className="grid place-items-center p-5 shadow-md bg-white/50 backdrop-blur-md text-gray-900">
+    <header className="grid place-items-center p-5 shadow-md bg-white/50 backdrop-blur-md text-gray-900 fixed top-0 left-0 right-0 z-50">
       <div className="max-w-5xl w-full flex items-center justify-center">
         <div className="flex items-center justify-center space-x-4">
           <svg
