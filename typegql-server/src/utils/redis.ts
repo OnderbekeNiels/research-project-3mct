@@ -10,8 +10,13 @@ export const checkCache = async (
     redisClient.get(key, async (err, data) => {
       if (err) return reject(err);
       if (data != null) {
+        try {
+          return resolve(JSON.parse(data));
+          
+        } catch (error) {
+          console.error(error)
+        }
         // logger.info("read from cache");
-        return resolve(JSON.parse(data));
       } else {
         // logger.info("read from db");
         const newData = await callback();

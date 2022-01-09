@@ -19,7 +19,7 @@ export class UserResolver {
     private readonly postService: PostService
   ) {}
 
-  ttlCache: number = 80;
+  ttlCache: number = 20;
 
   // @Query(() => [User])
   // async UsersAll(@Ctx() ctx: any) {

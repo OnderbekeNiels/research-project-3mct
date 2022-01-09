@@ -13,7 +13,7 @@ export class PostService {
 
   async all() {
     return await this.postRepository.find({
-      take: 15,
+      take: 150,
     });
   }
 
