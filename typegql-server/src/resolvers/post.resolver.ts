@@ -4,6 +4,7 @@ import { Post } from "../entity/Posts";
 import { CommentService } from "../services/comment.service";
 import { PostService } from "../services/posts.service";
 import { UserService } from "../services/user.service";
+import { VoteService } from "../services/votes.service";
 import { checkCache } from "../utils/redis";
 
 @Service()
@@ -12,7 +13,8 @@ export class PostResolver {
   constructor(
     private readonly postService: PostService,
     private readonly commentService: CommentService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly voteService: VoteService
   ) {}
 
   ttlCache: number = 20;
@@ -80,5 +82,20 @@ export class PostResolver {
       }
     );
     return owner;
+  }
+
+  @FieldResolver()
+  async votesCount(@Root() post: Post, @Ctx() ctx: any): Promise<number> {
+    const votes = await checkCache(
+      ctx.redisClient,
+      `vote-count-from-post-${post.id}`,
+      this.ttlCache,
+      async () => {
+        return await this.voteService.countByArgs({
+          where: { postId: post.id },
+        });
+      }
+    );
+    return +votes;
   }
 }

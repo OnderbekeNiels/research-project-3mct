@@ -5,7 +5,7 @@ export const checkCache = async (
   key: string,
   maxAge: number,
   callback: Function
-): Promise<Object> => {
+): Promise<Object | Array<any> | number> => {
   return new Promise((resolve, reject) => {
     redisClient.get(key, async (err, data) => {
       if (err) return reject(err);

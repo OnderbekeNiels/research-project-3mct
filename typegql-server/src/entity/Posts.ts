@@ -95,6 +95,9 @@ export class Post {
   @Column("int", { name: "ViewCount" })
   viewCount: number;
 
+  @Field()
+  votesCount: number;
+
   @Field(() => [Comment], { nullable: true })
   @OneToMany(() => Comment, (c: Comment) => c.post, { nullable: true })
   comments?: Comment[];
