@@ -206,7 +206,7 @@ export default function UserDetail() {
                     </ul>
                   </div>
                 </ContentBox>
-                <ContentBox className="items-start">
+                <ContentBox className="self-start">
                   <Head2>Stats</Head2>
                   <div className="">
                     <div className="grid grid-cols-2 gap-2">
@@ -241,7 +241,7 @@ export default function UserDetail() {
                     </div>
                   </div>
                 </ContentBox>
-                <ContentBox>
+                <ContentBox className='self-start'>
                   <Head2>Badges</Head2>
                   <div className="w-full flex flex-wrap gap-2 content-start">
                     {user.badges &&
