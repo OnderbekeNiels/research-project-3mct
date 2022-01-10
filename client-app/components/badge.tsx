@@ -7,7 +7,7 @@ export default function Badge({name}:BadgeArgs){
         <button className="p-2 bg-orange-50 rounded-md text-xs flex items-center gap-2 min-w-max">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 text-purple-500"
+            className="h-5 w-5 text-purple-700"
             viewBox="0 0 20 20"
             fill="currentColor"
           >

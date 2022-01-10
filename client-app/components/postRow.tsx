@@ -1,25 +1,33 @@
+import { useRouter } from "next/router";
 import { formateDateToLongNotation, formatToDate } from "../utils/date";
 
 export interface PostRowArgs {
-  id?: number;
+  id: number;
   answerCount: number | null;
   title: string | null;
   acceptedAnswerId: number | null;
   lastEditDate: string | null;
 }
 
-export default function PostRow({
+export default function PostRow({id,
   title,
   answerCount,
   acceptedAnswerId,
   lastEditDate,
 }: PostRowArgs) {
+
+  const router = useRouter()
   return (
-    <div className="grid grid-cols-[auto_auto_1fr_auto] gap-4 items-center bg-orange-50 p-2 rounded-md">
+    <button
+      onClick={() => {
+        router.push(`/${id}`);
+      }}
+      className="grid grid-cols-[1.5rem_3rem_1fr_auto] gap-4 items-center bg-orange-50 p-2 rounded-md text-left"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className={`h-6 w-6 ${
-          acceptedAnswerId === 0 ? "text-gray-600" : "text-green-600"
+          acceptedAnswerId === 0 ? "text-gray-600" : "text-teal-600"
         } `}
         viewBox="0 0 20 20"
         fill="currentColor"
@@ -30,13 +38,13 @@ export default function PostRow({
           clipRule="evenodd"
         />
       </svg>
-      <div className="px-2 py-0.5 bg-green-600 text-white rounded-md">
+      <div className="px-2 py-0.5 bg-teal-600 text-white rounded-md text-center">
         {answerCount}
       </div>
-      <p>{title}</p>
+      <p>{title ? title : "Untitled"}</p>
       <p>
         {lastEditDate && formateDateToLongNotation(formatToDate(lastEditDate))}
       </p>
-    </div>
+    </button>
   );
 }

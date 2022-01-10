@@ -76,9 +76,8 @@ export class PostResolver {
       `owner-${post.ownerUserId}-from-post-${post.id}`,
       this.ttlCache,
       async () => {
-        const s = await this.userService.findById(post.ownerUserId);
-        // console.log({s})
-        return s;
+        return await this.userService.findById(post.ownerUserId);
+        
       }
     );
     return owner;

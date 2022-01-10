@@ -206,35 +206,35 @@ export default function UserDetail() {
                     </ul>
                   </div>
                 </ContentBox>
-                <ContentBox>
+                <ContentBox className="items-start">
                   <Head2>Stats</Head2>
                   <div className="">
                     <div className="grid grid-cols-2 gap-2">
                       <NumberBox
                         value={user.upVotes}
                         description="Up votes"
-                        bgColor="bg-green-500"
+                        bgColor="bg-sky-500"
                         textColor="text-white"
                         fullSquare
                       ></NumberBox>
                       <NumberBox
                         value={user.downVotes}
                         description="Down votes"
-                        bgColor="bg-red-500"
+                        bgColor="bg-rose-500"
                         textColor="text-white"
                         fullSquare
                       ></NumberBox>
                       <NumberBox
                         value={user.views}
                         description="Views"
-                        bgColor="bg-purple-500"
+                        bgColor="bg-purple-700"
                         textColor="text-white"
                         fullSquare
                       ></NumberBox>
                       <NumberBox
                         value={user.reputation}
                         description="Reputation"
-                        bgColor="bg-orange-500"
+                        bgColor="bg-orange-600"
                         textColor="text-white"
                         fullSquare
                       ></NumberBox>
@@ -258,6 +258,7 @@ export default function UserDetail() {
                         return (
                           <PostRow
                             key={p.id}
+                            id={p.id}
                             title={p.title}
                             acceptedAnswerId={p.acceptedAnswerId}
                             answerCount={p.answerCount}
