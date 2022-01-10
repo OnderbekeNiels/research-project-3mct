@@ -29,9 +29,14 @@ export default function PostDetail() {
         id
     answerCount
     communityOwnedDate
+    lastEditDate
     body
       ownerUser {
-      displayName
+        id
+        displayName
+        upVotes
+        downVotes
+        reputation
     }
     tags
     title
@@ -39,6 +44,7 @@ export default function PostDetail() {
     comments {
       text
       user {
+        id
         displayName
       }
       creationDate
@@ -56,7 +62,7 @@ export default function PostDetail() {
 
   useEffect(() => {
     if (postId) getPost(+postId);
-  }, []);
+  }, [postId]);
 
   return (
     <>
@@ -66,11 +72,10 @@ export default function PostDetail() {
           {post === undefined && <ContentBox>Loading</ContentBox>}
           {post && (
             <>
-              {" "}
-              <Head1>{post.title}</Head1>
-              <ul className="flex space-x-4">
+              <Head1>{post.title ? post.title : "Untiteld post"}</Head1>
+              <ul className="flex space-x-4 text-sm">
                 <li>
-                  Asked{" "}
+                  Asked
                   <span className="font-bold text-orange-600 ml-1">
                     {post.ownerUser
                       ? post.ownerUser.displayName
@@ -78,13 +83,23 @@ export default function PostDetail() {
                   </span>
                 </li>
                 <li>
-                  Viewed{" "}
+                  Viewed
                   <span className="font-bold text-orange-600 ml-1">
                     {post.viewCount}
                   </span>
                 </li>
+                <li>
+                  Last edit
+                  <span className="font-bold text-orange-600 ml-1">
+                    {post.lastEditDate ? new Date(post.lastEditDate).toLocaleDateString() : "Not available"}
+                  </span>
+                </li>
               </ul>
-              <Post className="mt-6" post={post as PostArgs} detailMode={true}></Post>
+              <Post
+                className="mt-6"
+                post={post as PostArgs}
+                detailMode={true}
+              ></Post>
             </>
           )}
         </Container>

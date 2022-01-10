@@ -25,7 +25,11 @@ const Home: NextPage = () => {
       body
       commentCount
       ownerUser {
+        id
         displayName
+        upVotes
+        downVotes
+        reputation
       }
       tags
       title

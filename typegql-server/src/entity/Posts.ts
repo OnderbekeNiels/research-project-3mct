@@ -25,7 +25,7 @@ export class Post {
 
   @Field({ nullable: true })
   @Column("datetime", { name: "ClosedDate", nullable: true })
-  closedDate: Date | null;
+  closedDate: string | null;
 
   @Field({ nullable: true })
   @Column("int", { name: "CommentCount", nullable: true })
@@ -36,7 +36,7 @@ export class Post {
   communityOwnedDate: string | null;
 
   @Column("datetime", { name: "CreationDate" })
-  creationDate: Date;
+  creationDate: string;
 
   @Field({ nullable: true })
   @Column("int", { name: "FavoriteCount", nullable: true })
@@ -48,7 +48,7 @@ export class Post {
 
   @Field({ nullable: true })
   @Column("datetime", { name: "LastEditDate", nullable: true })
-  lastEditDate: Date | null;
+  lastEditDate: string | null;
 
   @Field({ nullable: true })
   @Column("nvarchar", {
