@@ -12,7 +12,7 @@ export default interface PostType {
   creationDate: Date;
   favoriteCount: number | null;
   lastActivityDate: Date;
-  lastEditDate: Date | null;
+  lastEditDate: string | null;
   lastEditorDisplayName: string | null;
   lastEditorUserId: number | null;
   ownerUserId: number | null;

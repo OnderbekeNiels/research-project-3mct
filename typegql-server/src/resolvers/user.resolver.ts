@@ -107,12 +107,15 @@ export class UserResolver {
       `posts-from-user-${user.id}`,
       this.ttlCache,
       async () => {
-        return await this.postService.findAllByArgs({
+        const p =  await this.postService.findAllByArgs({
           userId: user.id,
           take: 10,
         });
+        console.log(p[0])
+        return p
       }
     );
+    console.log(posts[0])
     return posts;
   }
 }

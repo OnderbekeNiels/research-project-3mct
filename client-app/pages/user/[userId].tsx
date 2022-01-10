@@ -6,9 +6,12 @@ import NumberBox from "../../components/numberBox";
 import Container from "../../components/objects/container";
 import { Head2 } from "../../components/objects/head";
 import Row from "../../components/objects/row";
+import PostRow from "../../components/postRow";
 import BadgeType from "../../models/badge";
+import PostType from "../../models/post";
 import UserType, { Anonymous } from "../../models/user";
 import createMarkup from "../../utils/core";
+import { formateDateToLongNotation, formatToDate } from "../../utils/date";
 import { query } from "../../utils/fetch";
 
 export default function UserDetail() {
@@ -37,6 +40,13 @@ export default function UserDetail() {
       name
     }
     views
+    posts {
+        id
+        answerCount
+        title
+        acceptedAnswerId
+        lastEditDate
+      }
   }
 }`,
         { userId: id }
@@ -137,7 +147,9 @@ export default function UserDetail() {
                           />
                         </svg>
                         <p>
-                          {new Date(user.creationDate).toLocaleDateString()}
+                          {formateDateToLongNotation(
+                            formatToDate(user.creationDate)
+                          )}
                         </p>
                       </li>
                       {user.age && (
@@ -241,23 +253,18 @@ export default function UserDetail() {
                 <ContentBox className="col-span-2">
                   <Head2>Top Posts</Head2>
                   <div className="grid gap-2">
-                  <div className="grid grid-cols-[auto_auto_1fr_auto] gap-4 items-center bg-orange-50 p-2 rounded-md">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6 text-green-600"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <div className="px-2 py-0.5 bg-green-600 text-white rounded-md">512</div>
-                    <p>Title</p>
-                    <p>date</p>
-                  </div>
+                    {user.posts &&
+                      user.posts?.map((p: PostType) => {
+                        return (
+                          <PostRow
+                            key={p.id}
+                            title={p.title}
+                            acceptedAnswerId={p.acceptedAnswerId}
+                            answerCount={p.answerCount}
+                            lastEditDate={p.lastEditDate}
+                          ></PostRow>
+                        );
+                      })}
                   </div>
                 </ContentBox>
               </>

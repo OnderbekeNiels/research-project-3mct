@@ -11,6 +11,7 @@ import CommentType from "../models/comment";
 import PostType from "../models/post";
 import { Anonymous } from "../models/user";
 import createMarkup from "../utils/core";
+import { formateDateToLongNotation, formatToDate } from "../utils/date";
 import { query } from "../utils/fetch";
 import formatTags from "../utils/string";
 
@@ -91,7 +92,9 @@ export default function PostDetail() {
                 <li>
                   Last edit
                   <span className="font-bold text-orange-600 ml-1">
-                    {post.lastEditDate ? new Date(post.lastEditDate).toLocaleDateString() : "Not available"}
+                    {post.lastEditDate
+                      ? formateDateToLongNotation(formatToDate(post.lastEditDate))
+                      : "Not available"}
                   </span>
                 </li>
               </ul>

@@ -1,4 +1,5 @@
 export default function formatTags(tags: string): string[] {
-  if (!tags) return []
+  if (!tags) return [];
   return tags.split(/<|><|>/).filter((n) => n);
 }
+
