@@ -1,4 +1,4 @@
-import { Ctx, FieldResolver, Query, Resolver, Root } from "type-graphql";
+import { Arg, Ctx, FieldResolver, Query, Resolver, Root } from "type-graphql";
 import { Service } from "typedi";
 import { Post } from "../entity/Posts";
 import { CommentService } from "../services/comment.service";
@@ -18,8 +18,29 @@ export class PostResolver {
   ttlCache: number = 20;
 
   @Query(() => [Post])
-  async PostsAll() {
-    return await this.postService.all();
+  async PostsAll(@Ctx() ctx: any) {
+    const posts = await checkCache(
+      ctx.redisClient,
+      "allposts",
+      this.ttlCache,
+      async () => {
+        return await this.postService.all();
+      }
+    );
+    return posts;
+  }
+
+  @Query(() => Post)
+  async PostById(@Arg("postId") postId: number, @Ctx() ctx: any) {
+    const post = await checkCache(
+      ctx.redisClient,
+      `post-${postId}`,
+      this.ttlCache,
+      async () => {
+        return await this.postService.findById(postId);
+      }
+    );
+    return post;
   }
 
   // @FieldResolver()
@@ -53,9 +74,9 @@ export class PostResolver {
       `owner-${post.ownerUserId}-from-post-${post.id}`,
       this.ttlCache,
       async () => {
-        const s =  await this.userService.findById(post.ownerUserId);
+        const s = await this.userService.findById(post.ownerUserId);
         // console.log({s})
-        return s
+        return s;
       }
     );
     return owner;

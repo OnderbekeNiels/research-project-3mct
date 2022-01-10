@@ -1,5 +1,6 @@
+import { useRouter } from "next/router";
 import React, { useState } from "react";
-import UserType from "../models/user";
+import UserType, { Anonymous } from "../models/user";
 import createMarkup from "../utils/core";
 import formatTags from "../utils/string";
 import ContentBox from "./contentBox";
@@ -7,9 +8,9 @@ import NumberBox from "./numberBox";
 import { Head2 } from "./objects/head";
 import Tag from "./tag";
 
-export interface PostType {
+export interface PostArgs {
   id: number;
-  votesCount: number;
+  votesCount?: number;
   answerCount: number;
   title: string;
   body: string;
@@ -17,13 +18,19 @@ export interface PostType {
   tags: string;
 }
 
-export default function Post(props: any) {
+export default function Post({ post }: { post: PostArgs }) {
+  const router = useRouter();
   const [formatedTags, setFormatedTags] = useState<string[]>(
-    formatTags(props.post.tags)
+    formatTags(post.tags)
   );
 
   return (
-    <ContentBox className="grid grid-cols-[auto_1fr] gap-4 hover:shadow-lg cursor-pointer">
+    <ContentBox
+      onClick={() => {
+        router.push(`/${post.id}`);
+      }}
+      className="grid grid-cols-[auto_1fr] gap-4 hover:shadow-lg cursor-pointer"
+    >
       <div className="grid gap-2 -ml-2 -my-2">
         <NumberBox
           //   value={post.votesCount}
@@ -33,22 +40,22 @@ export default function Post(props: any) {
           textColor="text-white"
         ></NumberBox>
         <NumberBox
-          value={props.post.answerCount}
+          value={post.answerCount}
           description="answers"
           bgColor="bg-teal-500"
           textColor="text-white"
         ></NumberBox>
       </div>
       <div className="text-gray-900">
-        <Head2>{props.post.title}</Head2>
+        <Head2>{post.title}</Head2>
         <div
           className="leading-5 overflow-hidden max-h-16"
-          dangerouslySetInnerHTML={createMarkup(props.post.body)}
+          dangerouslySetInnerHTML={createMarkup(post.body)}
         ></div>
         <p className="mt-2 text-sm">
           asked by
           <span className="font-bold text-orange-600 ml-1">
-            {props.post.ownerUser && props.post.ownerUser.displayName}
+            {post.ownerUser ? post.ownerUser.displayName : Anonymous.name}
           </span>
         </p>
         {formatedTags.length > 0 && (
