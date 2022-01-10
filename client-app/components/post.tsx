@@ -21,7 +21,7 @@ export interface PostArgs {
 export default function Post({
   post,
   detailMode = false,
-  className = "",
+  className = ""
 }: {
   post: PostArgs;
   detailMode?: boolean;

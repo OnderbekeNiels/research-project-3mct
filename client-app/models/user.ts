@@ -1,3 +1,4 @@
+import BadgeType from "./badge";
 import CommentType from "./comment";
 import PostType from "./post";
 
@@ -16,7 +17,7 @@ export default interface UserType {
   views: number;
   websiteUrl: string | null;
   accountId: number | null;
-  //   badges?: Badge[];
+    badges?: BadgeType[];
   comments?: CommentType[];
   posts?: PostType[];
 }

@@ -1,4 +1,4 @@
-import { Ctx, FieldResolver, Query, Resolver, Root } from "type-graphql";
+import { Arg, Ctx, FieldResolver, Query, Resolver, Root } from "type-graphql";
 import { Service } from "typedi";
 import { User } from "../entity/Users";
 import { Comment } from "../entity/Comments";
@@ -39,10 +39,34 @@ export class UserResolver {
     return users;
   }
 
-  // @FieldResolver()
-  // async badges(@Root() user: User) {
-  //   return await this.badgeService.findAllByArgs({ userId: user.id });
-  // }
+  @Query(() => User)
+  async UserById(@Arg("userId") userId: number, @Ctx() ctx: any) {
+    const user = await checkCache(
+      ctx.redisClient,
+      `user-${userId}`,
+      this.ttlCache,
+      async () => {
+        return await this.userService.findById(userId);
+      }
+    );
+    return user;
+  }
+
+  @FieldResolver()
+  async badges(@Root() user: User,@Ctx() ctx: any) {
+    const badges = await checkCache(
+      ctx.redisClient,
+      `badges-from-user-${user.id}`,
+      this.ttlCache,
+      async () => {
+        return await this.badgeService.findAllByArgs({
+          userId: user.id,
+          take: 20,
+        });
+      }
+    );
+    return badges;
+  }
 
   // @FieldResolver()
   // async comments(@Root() user: User, @Ctx() ctx: any) {
