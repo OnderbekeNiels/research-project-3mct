@@ -10,7 +10,7 @@ import Tag from "./tag";
 
 export interface PostArgs {
   id: number;
-  votesCount?: number;
+  votesCount: number;
   answerCount: number;
   title: string;
   body: string;
@@ -18,7 +18,15 @@ export interface PostArgs {
   tags: string;
 }
 
-export default function Post({ post }: { post: PostArgs }) {
+export default function Post({
+  post,
+  detailMode = false,
+  className = ""
+}: {
+  post: PostArgs;
+  detailMode?: boolean;
+  className?: string;
+}) {
   const router = useRouter();
   const [formatedTags, setFormatedTags] = useState<string[]>(
     formatTags(post.tags)
@@ -29,35 +37,43 @@ export default function Post({ post }: { post: PostArgs }) {
       onClick={() => {
         router.push(`/${post.id}`);
       }}
-      className="grid grid-cols-[auto_1fr] gap-4 hover:shadow-lg cursor-pointer"
+      className={`grid grid-cols-[auto_1fr] gap-4 hover:shadow-lg cursor-pointer ${className}`}
     >
-      <div className="grid gap-2 -ml-2 -my-2">
-        <NumberBox
-          //   value={post.votesCount}
-          value={0}
-          description="votes"
-          bgColor="bg-blue-500"
-          textColor="text-white"
-        ></NumberBox>
-        <NumberBox
-          value={post.answerCount}
-          description="answers"
-          bgColor="bg-teal-500"
-          textColor="text-white"
-        ></NumberBox>
-      </div>
+      {!detailMode && (
+        <div className="grid gap-2 -ml-2 -my-2">
+          <NumberBox
+            //   value={post.votesCount}
+            value={post.votesCount}
+            description="votes"
+            bgColor="bg-blue-500"
+            textColor="text-white"
+          ></NumberBox>
+          <NumberBox
+            value={post.answerCount}
+            description="answers"
+            bgColor="bg-teal-500"
+            textColor="text-white"
+          ></NumberBox>
+        </div>
+      )}
+
       <div className="text-gray-900">
-        <Head2>{post.title}</Head2>
+        <Head2>{detailMode ? "Description" : post.title}</Head2>
         <div
-          className="leading-5 overflow-hidden max-h-16"
+          className={`leading-5 overflow-hidden ${
+            detailMode ? "post-detail" : "max-h-16"
+          }`}
           dangerouslySetInnerHTML={createMarkup(post.body)}
         ></div>
-        <p className="mt-2 text-sm">
-          asked by
-          <span className="font-bold text-orange-600 ml-1">
-            {post.ownerUser ? post.ownerUser.displayName : Anonymous.name}
-          </span>
-        </p>
+        {!detailMode && (
+          <p className="mt-2 text-sm">
+            asked by
+            <span className="font-bold text-orange-600 ml-1">
+              {post.ownerUser ? post.ownerUser.displayName : Anonymous.name}
+            </span>
+          </p>
+        )}
+
         {formatedTags.length > 0 && (
           <>
             <hr className="bg-gray-300 w-full border-2 my-2"></hr>

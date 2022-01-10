@@ -21,6 +21,7 @@ const Home: NextPage = () => {
     PostsAll {
       id
       answerCount
+      votesCount
       body
       commentCount
       ownerUser {

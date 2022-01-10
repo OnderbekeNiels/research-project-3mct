@@ -23,6 +23,6 @@ export default interface PostType {
   tags: string | null;
   title: string | null;
   viewCount: number;
-  votesCount?: number;
+  votesCount: number;
   comments?: CommentType[];
 }

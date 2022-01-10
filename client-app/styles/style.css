@@ -5,11 +5,10 @@ body {
 
 
 pre {
-  display: none;
-  @apply bg-gray-700 text-white p-2 rounded-md max-w-min my-10;
+  @apply bg-gray-700 text-white p-2 rounded-md max-w-min hidden;
 }
 
 
 .post-detail > pre{
-  display: block;
+ @apply block my-4
 }

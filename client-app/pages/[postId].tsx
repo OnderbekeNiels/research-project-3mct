@@ -5,6 +5,7 @@ import ContentBox from "../components/contentBox";
 import Container from "../components/objects/container";
 import { Head1, Head2 } from "../components/objects/head";
 import Row from "../components/objects/row";
+import Post, { PostArgs } from "../components/post";
 import Tag from "../components/tag";
 import CommentType from "../models/comment";
 import PostType from "../models/post";
@@ -78,26 +79,12 @@ export default function PostDetail() {
                 </li>
                 <li>
                   Viewed{" "}
-                  <span className="font-bold text-orange-600 ml-1">{post.viewCount}</span>
+                  <span className="font-bold text-orange-600 ml-1">
+                    {post.viewCount}
+                  </span>
                 </li>
               </ul>
-              <ContentBox className="mt-6 post-detail">
-                <Head2>Description</Head2>
-                <div
-                  className="leading-5"
-                  dangerouslySetInnerHTML={createMarkup(post.body)}
-                ></div>
-                {formatedTags.length > 0 && (
-                  <>
-                    <hr className="bg-gray-300 w-full border-2 my-2"></hr>
-                    <div className="w-full flex flex-wrap gap-2 content-start">
-                      {formatedTags.map((t: string) => (
-                        <Tag tagName={t} key={t}></Tag>
-                      ))}
-                    </div>
-                  </>
-                )}
-              </ContentBox>
+              <Post className="mt-6" post={post as PostArgs} detailMode={true}></Post>
             </>
           )}
         </Container>
