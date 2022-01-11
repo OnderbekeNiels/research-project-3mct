@@ -12,6 +12,10 @@ export function Head2({ children }: any) {
   );
 }
 
-// export function Head3({ children }: any) {
-//   return <h3 className="font-bold mb-2">{children}</h3>;
-// }
+export function Head3({ children }: any) {
+  return (
+    <h3 className="text-md md:text-lg font-semibold text-gray-800">
+      {children}
+    </h3>
+  );
+}

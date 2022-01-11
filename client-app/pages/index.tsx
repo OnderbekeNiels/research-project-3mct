@@ -11,7 +11,6 @@ import { query } from "../utils/fetch";
 
 const Home: NextPage = () => {
   const [posts, setPosts] = useState<PostType[] | undefined | null>(undefined);
-  // const [postsFetchError, setPostsFetchError] = useState<boolean>(false);
 
   const getPosts = async () => {
     try {
@@ -54,12 +53,14 @@ const Home: NextPage = () => {
           <div className="grid sm:gap-6 mt-6">
             {posts === null && <ContentBox>Something went wrong</ContentBox>}
             {posts === undefined && <ContentBox>Loading posts</ContentBox>}
-            {posts && posts.length < 0 && <ContentBox>No posts found to display</ContentBox>}
-            {posts && posts.length > 0
-              && posts.map((p: PostType) => (
-                  <Post key={p.id.toString()} post={p as PostArgs}></Post>
-                ))
-                }
+            {posts && posts.length < 0 && (
+              <ContentBox>No posts found to display</ContentBox>
+            )}
+            {posts &&
+              posts.length > 0 &&
+              posts.map((p: PostType) => (
+                <Post key={p.id.toString()} post={p as PostArgs}></Post>
+              ))}
           </div>
         </Container>
       </Row>

@@ -215,6 +215,7 @@ export default function UserDetail() {
                         description="Up votes"
                         bgColor="bg-sky-500"
                         textColor="text-white"
+                        size="md"
                         fullSquare
                       ></NumberBox>
                       <NumberBox
@@ -222,6 +223,7 @@ export default function UserDetail() {
                         description="Down votes"
                         bgColor="bg-rose-500"
                         textColor="text-white"
+                        size="md"
                         fullSquare
                       ></NumberBox>
                       <NumberBox
@@ -229,6 +231,7 @@ export default function UserDetail() {
                         description="Views"
                         bgColor="bg-purple-700"
                         textColor="text-white"
+                        size="md"
                         fullSquare
                       ></NumberBox>
                       <NumberBox
@@ -236,12 +239,13 @@ export default function UserDetail() {
                         description="Reputation"
                         bgColor="bg-orange-600"
                         textColor="text-white"
+                        size="md"
                         fullSquare
                       ></NumberBox>
                     </div>
                   </div>
                 </ContentBox>
-                <ContentBox className='self-start'>
+                <ContentBox className="self-start">
                   <Head2>Badges</Head2>
                   <div className="w-full flex flex-wrap gap-2 content-start">
                     {user.badges &&
