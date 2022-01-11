@@ -47,7 +47,7 @@ export default function Post({
             //   value={post.votesCount}
             value={post.votesCount}
             description="votes"
-            bgColor="bg-blue-500"
+            bgColor="bg-sky-500"
             textColor="text-white"
           ></NumberBox>
           <NumberBox
@@ -76,7 +76,7 @@ export default function Post({
         <button
           onClick={(e) => {
             e.stopPropagation();
-            post.ownerUser && router.push(`/user/${post.ownerUser.id}`);
+            post.ownerUser && router.push(`/users/${post.ownerUser.id}`);
           }}
         >
           <div className="mt-4 text-sm flex bg-orange-50 px-2 py-1 rounded-md max-w-max">

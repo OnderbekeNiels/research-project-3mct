@@ -1,7 +1,10 @@
+import Link from "next/link";
+import React from "react";
+
 export default function Header() {
   return (
     <header className="grid place-items-center p-5 shadow-md bg-white/50 backdrop-blur-md text-gray-900 fixed top-0 right-0 left-0 z-50">
-      <div className="max-w-5xl w-full flex items-center justify-center">
+      <div className="max-w-5xl w-full flex items-center justify-between px-4 sm:px-6">
         <div className="flex items-center justify-center space-x-4">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -34,8 +37,19 @@ export default function Header() {
             <p className="ml-1 font-bold inline">overflow</p>
           </div>
         </div>
+        <ul className="flex space-x-2">
+          <li className="px-4 py-1 rounded-full text-lg font-semibold text-white bg-sky-500">
+            <Link href="/">
+              <a>Posts</a>
+            </Link>
+          </li>
+          <li className="px-4 py-1 rounded-full text-lg font-semibold">
+            <Link href="/users">
+              <a>Users</a>
+            </Link>
+          </li>
+        </ul>
       </div>
     </header>
   );
 }
-
