@@ -34,9 +34,10 @@ export default function Header() {
                 />
               </g>
             </svg>
-            <div className="text-xl">
-              <p className="inline">stack</p>
-              <p className="ml-1 font-bold inline">overflow</p>
+            <div className="text-xl flex items-center space-x-1">
+              <p>stack</p>
+              <p className="font-bold">overflow</p>
+              <p className="font-thin text-sm">(research edition)</p>
             </div>
           </a>
         </Link>

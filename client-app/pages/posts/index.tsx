@@ -11,9 +11,11 @@ import { query } from "../../utils/fetch";
 
 const Home: NextPage = () => {
   const [posts, setPosts] = useState<PostType[] | undefined | null>(undefined);
+  const [requestTime, setRequestTime] = useState<number>(0)
 
   const getPosts = async () => {
     try {
+      const startTime = new Date().getTime()
       const posts: PostType[] = await query(
         `PostsAll`,
         `query PostsAll {
@@ -35,6 +37,10 @@ const Home: NextPage = () => {
       viewCount
   }}`
       );
+      if(posts){
+        const travelTime = new Date().getTime() - startTime
+        setRequestTime(travelTime)
+      }
       setPosts(posts);
     } catch (error) {
       setPosts(null);
@@ -49,7 +55,7 @@ const Home: NextPage = () => {
     <>
       <Row>
         <Container>
-          <Head1>Latest posts ({posts && posts.length})</Head1>
+          <Head1>Latest posts ({posts && posts.length}) - Request travel: {requestTime} ms</Head1>
           <div className="grid sm:gap-6 mt-6">
             {posts === null && <ContentBox>Something went wrong</ContentBox>}
             {posts === undefined && <ContentBox>Loading posts</ContentBox>}
