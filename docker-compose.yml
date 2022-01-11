@@ -9,7 +9,7 @@ services:
     env_file:
       - .env
     volumes: 
-      - ./../stackoverflow-small:/var/opt/mssql/data
+      - C:\Users\niels\OneDrive\Documenten\StackOverflow:/var/opt/mssql/data
 
   redisServer:
     image: redis:6.2-alpine

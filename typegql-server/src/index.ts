@@ -106,26 +106,26 @@ useContainer(Container);
   // bron: https://gist.github.com/benawad/7abb41c179b050b476fdad4e5a561161
   const app = Express();
   app.use("/graphql", (req, res, next) => {
-    const startHrTime = process.hrtime();
-
-    res.on("finish", () => {
-      if (
-        req.body &&
-        req.body.operationName &&
-        req.body.operationName != "IntrospectionQuery"
-      ) {
-        const elapsedHrTime = process.hrtime(startHrTime);
-        const elapsedTimeInMs =
-          elapsedHrTime[0] * 1000 + elapsedHrTime[1] / 1e6;
-        logger.info({
-          type: "timing",
-          name: req.body.operationName,
-          ms: elapsedTimeInMs,
-        });
-      }
-    });
-
-    next();
+      const startHrTime = process.hrtime();
+  
+      res.on("finish", () => {
+        if (
+          req.body &&
+          req.body.operationName &&
+          req.body.operationName != "IntrospectionQuery"
+        ) {
+          const elapsedHrTime = process.hrtime(startHrTime);
+          const elapsedTimeInMs =
+            elapsedHrTime[0] * 1000 + elapsedHrTime[1] / 1e6;
+          logger.info({
+            type: "timing",
+            name: req.body.operationName,
+            ms: elapsedTimeInMs,
+          });
+        }
+      });
+  
+      next();
   });
 
 

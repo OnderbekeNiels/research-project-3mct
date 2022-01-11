@@ -65,7 +65,7 @@ export default function UserDetail() {
     <>
       <Row>
         <Container>
-          <div className="grid grid-cols-3 gap-6 relative top-10">
+          <div className="grid grid-cols-3 gap-6 pt-10">
             {user && (
               <>
                 <ContentBox className="col-span-2 relative">

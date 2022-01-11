@@ -62,7 +62,6 @@ export class PostResolver {
       async () => {
         return await this.commentService.findAllByArgs({
           where: { postId: post.id },
-          take: 10,
         });
       }
     );
@@ -77,7 +76,6 @@ export class PostResolver {
       this.ttlCache,
       async () => {
         return await this.userService.findById(post.ownerUserId);
-        
       }
     );
     return owner;

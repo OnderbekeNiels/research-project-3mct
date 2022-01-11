@@ -4,11 +4,10 @@ body {
 
 
 
-pre {
-  @apply bg-gray-700 text-white p-2 rounded-md max-w-min hidden;
+div > pre {
+  @apply bg-gray-700 text-white p-2 rounded-md my-4;
 }
 
-
-.post-detail > pre{
- @apply block my-4
+code{
+  @apply whitespace-pre-wrap
 }

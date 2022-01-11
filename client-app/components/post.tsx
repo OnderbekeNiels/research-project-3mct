@@ -68,8 +68,8 @@ export default function Post({
             : "Untiteld post"}
         </Head2>
         <div
-          className={`leading-5 overflow-hidden ${
-            detailMode ? "post-detail" : "max-h-16"
+          className={`leading-5 max-w-1/3 ${
+            detailMode ? "post-detail" : "max-h-32 overflow-auto"
           }`}
           dangerouslySetInnerHTML={createMarkup(post.body)}
         ></div>
