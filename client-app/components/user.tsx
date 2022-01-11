@@ -22,9 +22,9 @@ export default function User({
   return (
     <ContentBox
       onClick={() => {
-        id && router.push(`/users/${id}`);
+        if (id) router.push(`/users/${id}`);
       }}
-      className="grid grid-cols-[auto_1fr_auto] gap-4 items-center"
+      className={`grid grid-cols-[auto_1fr_auto] gap-4 items-center ${id && "cursor-pointer hover:shadow-lg"}`}
     >
       <div className="aspect-square w-8 rounded-full grid place-items-center bg-orange-50 border-2 border-orange-500">
         <svg

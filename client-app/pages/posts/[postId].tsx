@@ -1,19 +1,18 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import Comment from "../components/comment";
-import ContentBox from "../components/contentBox";
-import Container from "../components/objects/container";
-import { Head1, Head2 } from "../components/objects/head";
-import Row from "../components/objects/row";
-import Post, { PostArgs } from "../components/post";
-import Tag from "../components/tag";
-import CommentType from "../models/comment";
-import PostType from "../models/post";
-import { Anonymous } from "../models/user";
-import createMarkup from "../utils/core";
-import { formateDateToLongNotation, formatToDate } from "../utils/date";
-import { query } from "../utils/fetch";
-import formatTags from "../utils/string";
+import Comment from "../../components/comment";
+import ContentBox from "../../components/contentBox";
+import Container from "../../components/objects/container";
+import { Head1, Head2 } from "../../components/objects/head";
+import Row from "../../components/objects/row";
+import Post, { PostArgs } from "../../components/post";
+import CommentType from "../../models/comment";
+import PostType from "../../models/post";
+import { Anonymous } from "../../models/user";
+import createMarkup from "../../utils/core";
+import { formateDateToLongNotation, formatToDate } from "../../utils/date";
+import { query } from "../../utils/fetch";
+import formatTags from "../../utils/string";
 
 export default function PostDetail() {
   const router = useRouter();
@@ -94,7 +93,9 @@ export default function PostDetail() {
                   Last edit
                   <span className="font-bold text-orange-600 ml-1">
                     {post.lastEditDate
-                      ? formateDateToLongNotation(formatToDate(post.lastEditDate))
+                      ? formateDateToLongNotation(
+                          formatToDate(post.lastEditDate)
+                        )
                       : "Not available"}
                   </span>
                 </li>
@@ -109,7 +110,7 @@ export default function PostDetail() {
         </Container>
       </Row>
       {post && post.comments && post.comments.length > 0 && (
-        <Row>
+        <Row className="mt-4 sm:mt-6 md:mt-10">
           <Container>
             <Head2>Comments</Head2>
             <div className="grid gap-2">

@@ -35,7 +35,7 @@ export default function Post({
   return (
     <ContentBox
       onClick={() => {
-        !detailMode && router.push(`/${post.id}`);
+        !detailMode && router.push(`/posts/${post.id}`);
       }}
       className={`grid grid-cols-[auto_1fr] gap-4 ${
         !detailMode && "hover:shadow-lg cursor-pointer"

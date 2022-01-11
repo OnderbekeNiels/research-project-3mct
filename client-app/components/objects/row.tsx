@@ -1,5 +1,9 @@
-export default function Row({ children }: any) {
+export default function Row({ children, className }: any) {
   return (
-    <section className="mt-4 sm:mt-6 md:mt-10">{children}</section>
+    <section
+      className={`peer peer:mt-4 peer:sm:mt-6 peer:md:mt-10 ${className}`}
+    >
+      {children}
+    </section>
   );
 }

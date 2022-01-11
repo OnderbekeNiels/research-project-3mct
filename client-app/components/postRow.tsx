@@ -20,7 +20,7 @@ export default function PostRow({id,
   return (
     <button
       onClick={() => {
-        router.push(`/${id}`);
+        router.push(`/posts/${id}`);
       }}
       className="grid grid-cols-[1.5rem_3rem_1fr_auto] gap-4 items-center bg-orange-50 p-2 rounded-md text-left"
     >

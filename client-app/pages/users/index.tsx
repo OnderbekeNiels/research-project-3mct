@@ -49,6 +49,7 @@ export default function Users() {
               users.map((u: UserType) => (
                 <User
                   key={u.id.toString()}
+                  id={u.id}
                   displayName={u.displayName}
                   upVotes={u.upVotes}
                   downVotes={u.downVotes}
