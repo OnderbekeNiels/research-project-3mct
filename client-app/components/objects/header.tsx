@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import HeaderLink from "./headerLink";
 
 export default function Header() {
   return (
@@ -38,15 +39,11 @@ export default function Header() {
           </div>
         </div>
         <ul className="flex space-x-2">
-          <li className="px-4 py-1 rounded-full text-lg font-semibold text-white bg-sky-500">
-            <Link href="/">
-              <a>Posts</a>
-            </Link>
+          <li>
+            <HeaderLink>Posts</HeaderLink>
           </li>
-          <li className="px-4 py-1 rounded-full text-lg font-semibold">
-            <Link href="/users">
-              <a>Users</a>
-            </Link>
+          <li>
+            <HeaderLink href="/users">Users</HeaderLink>
           </li>
         </ul>
       </div>

@@ -43,6 +43,7 @@ export default function PostDetail() {
     title
     viewCount
     comments {
+      id
       text
       user {
         id
@@ -113,7 +114,7 @@ export default function PostDetail() {
             <Head2>Comments</Head2>
             <div className="grid gap-2">
               {post.comments.map((c: CommentType) => {
-                return <Comment comment={c}></Comment>;
+                return <Comment comment={c} key={c.id}></Comment>;
               })}
             </div>
           </Container>

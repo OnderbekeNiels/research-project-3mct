@@ -69,7 +69,7 @@ export default function Post({
         </Head2>
         <div
           className={`leading-5 max-w-1/3 ${
-            detailMode ? "post-detail" : "max-h-32 overflow-auto"
+            detailMode ? "post-detail" : "max-h-20 overflow-y-hidden hover:overflow-y-auto"
           }`}
           dangerouslySetInnerHTML={createMarkup(post.body)}
         ></div>
