@@ -1,13 +1,5 @@
-import type { NextPage } from 'next'
-import Header from '../components/header'
+import { Head1 } from "../components/objects/head";
 
-
-const Home: NextPage = () => {
-  return (
-    <div className=''>
-     <Header/>
-    </div>
-  )
+export default function Home(){
+    return(<Head1>Welcome to my research project, select a tab to start the GraphQl testing.</Head1>)
 }
-
-export default Home

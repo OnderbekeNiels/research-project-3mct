@@ -1,47 +1,133 @@
 import "reflect-metadata";
-import { ApolloServer } from "apollo-server-express";
+import { ApolloServer, gql } from "apollo-server-express";
 import * as Express from "express";
 import { buildSchema, Resolver, Query } from "type-graphql";
 import {
   ConnectionOptions,
   createConnection,
   getConnectionOptions,
+  getRepository,
   useContainer,
 } from "typeorm";
 import { UserResolver } from "./resolvers/user.resolver";
 import { Container } from "typedi";
 import { CommentResolver } from "./resolvers/comment.resolver";
 import { PostResolver } from "./resolvers/post.resolver";
-
-@Resolver()
-class HelloResolver {
-  @Query(() => String)
-  async helloWorld() {
-    return "Hello World!";
-  }
-}
+import responseCachePlugin from "apollo-server-plugin-response-cache";
+import { User } from "./entity/Users";
+import { ApolloServerPluginCacheControl } from "apollo-server-core";
+import { BaseRedisCache } from "apollo-server-cache-redis";
+import { logger } from "./utils/logger";
+import { Response } from "express";
+const Redis = require("ioredis");
 
 useContainer(Container);
 
 (async () => {
   const connectionOptions: ConnectionOptions = await getConnectionOptions();
   createConnection();
-  // console.log({connectionOptions})
 
-  // // Create the database before we make the connection. This will also add the tables
-  // createDatabase({ ifNotExist: true }, connectionOptions)
-  // .then(() => console.log("Database has been created!"))
-  // .then(createConnection)
-  // .then(async () => {
+  // Schema definition
+  // const typeDefs = gql`
+  //   enum CacheControlScope {
+  //     PUBLIC
+  //     PRIVATE
+  //   }
 
+  //   directive @cacheControl(
+  //     maxAge: Int
+  //     scope: CacheControlScope
+  //     inheritMaxAge: Boolean
+  //   ) on FIELD_DEFINITION | OBJECT | INTERFACE | UNION
+
+  //   type User @cacheControl(maxAge: 30) {
+  //     id: ID!
+  //     displayName: String
+  //     location: String
+  //   }
+
+  //   type Query {
+  //     UsersAll: [User]
+  //   }
+  // `;
+
+  // // Resolver map
+  // const resolvers = {
+  //   Query: {
+  //     UsersAll(_: any, { id }: any, ctx: any, info: any) {
+  //         console.log({ _ });
+  //       console.log({ctx})
+  //       console.log({ info });
+  //       const repository = getRepository(User);
+  //       // info.cacheControl.setCacheHint({ maxAge: 20, scope: "PUBLIC" });
+  //       return repository.find({take: 2});
+  //     },
+  //   },
+  // };
+
+  // ! Type gql way
   const schema = await buildSchema({
-    resolvers: [HelloResolver, UserResolver, CommentResolver, PostResolver],
-    container: Container
+    resolvers: [UserResolver, CommentResolver, PostResolver],
+    container: Container,
   });
 
-  const apolloServer = new ApolloServer({ schema });
+  // todo: redis password as env
+  const apolloServer = new ApolloServer({
+    schema,
+    context: ({ req, res }) => ({ req, res, redisClient: new Redis({
+        password: "mqsdfhmjkjKJFapaekrJqq",
+      }) }),
+  });
 
+  // const apolloServer = new ApolloServer({
+  //   typeDefs,
+  //   resolvers,
+  //   cache: new BaseRedisCache({
+  //     client: new Redis({
+  //       password: "mqsdfhmjkjKJFapaekrJqq",
+  //     }),
+  //   }),
+  // });
+
+  // ! Blank apollo express way
+  // const apolloServer = new ApolloServer({
+  //   typeDefs,
+  //   resolvers,
+  //   plugins: [
+  //     ApolloServerPluginCacheControl({
+  //       // Cache everything for 0 second by default.
+  //       defaultMaxAge: 10,
+  //       // Don't send the `cache-control` response header.
+  //       calculateHttpHeaders: false,
+  //     }),
+  //   ],
+  // });
+
+  // bron: https://gist.github.com/benawad/7abb41c179b050b476fdad4e5a561161
   const app = Express();
+  app.use("/graphql", (req, res, next) => {
+      const startHrTime = process.hrtime();
+  
+      res.on("finish", () => {
+        if (
+          req.body &&
+          req.body.operationName &&
+          req.body.operationName != "IntrospectionQuery"
+        ) {
+          const elapsedHrTime = process.hrtime(startHrTime);
+          const elapsedTimeInMs =
+            elapsedHrTime[0] * 1000 + elapsedHrTime[1] / 1e6;
+          logger.info({
+            type: "timing",
+            name: req.body.operationName,
+            ms: elapsedTimeInMs,
+          });
+        }
+      });
+  
+      next();
+  });
+
 
   await apolloServer.start();
   apolloServer.applyMiddleware({ app });

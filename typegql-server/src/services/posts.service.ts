@@ -13,7 +13,7 @@ export class PostService {
 
   async all() {
     return await this.postRepository.find({
-      take: 15,
+      take: 50,
     });
   }
 
@@ -23,5 +23,7 @@ export class PostService {
     });
   }
 
-
+  async findAllByArgs(args: {}) {
+    return await this.postRepository.find(args);
+  }
 }

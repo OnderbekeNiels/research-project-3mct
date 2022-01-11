@@ -1,6 +1,7 @@
 import { Field, ID, ObjectType } from "type-graphql";
-import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Comment } from "./Comments";
+import { User } from "./Users";
 
 @Index("PK_Posts_Id", ["id"], { unique: true })
 @ObjectType()
@@ -24,7 +25,7 @@ export class Post {
 
   @Field({ nullable: true })
   @Column("datetime", { name: "ClosedDate", nullable: true })
-  closedDate: Date | null;
+  closedDate: string | null;
 
   @Field({ nullable: true })
   @Column("int", { name: "CommentCount", nullable: true })
@@ -32,10 +33,10 @@ export class Post {
 
   @Field({ nullable: true })
   @Column("datetime", { name: "CommunityOwnedDate", nullable: true })
-  communityOwnedDate: Date | null;
+  communityOwnedDate: string | null;
 
   @Column("datetime", { name: "CreationDate" })
-  creationDate: Date;
+  creationDate: string;
 
   @Field({ nullable: true })
   @Column("int", { name: "FavoriteCount", nullable: true })
@@ -47,7 +48,7 @@ export class Post {
 
   @Field({ nullable: true })
   @Column("datetime", { name: "LastEditDate", nullable: true })
-  lastEditDate: Date | null;
+  lastEditDate: string | null;
 
   @Field({ nullable: true })
   @Column("nvarchar", {
@@ -64,6 +65,11 @@ export class Post {
   @Field({ nullable: true })
   @Column("int", { name: "OwnerUserId", nullable: true })
   ownerUserId: number | null;
+
+  @Field(() => User, { nullable: true })
+  @ManyToOne(() => User, (u: User) => u.id, { nullable: true })
+  @JoinColumn({ name: "OwnerUserId" })
+  ownerUser?: User;
 
   @Field({ nullable: true })
   @Column("int", { name: "ParentId", nullable: true })
@@ -88,6 +94,9 @@ export class Post {
   @Field()
   @Column("int", { name: "ViewCount" })
   viewCount: number;
+
+  @Field()
+  votesCount: number;
 
   @Field(() => [Comment], { nullable: true })
   @OneToMany(() => Comment, (c: Comment) => c.post, { nullable: true })

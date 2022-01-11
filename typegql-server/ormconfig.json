@@ -7,5 +7,6 @@
   "database": "StackOverflow",
   "entities": ["src/entity/**/*.ts"],
   "synchronize": false,
-  "extra": { "trustServerCertificate": true, "encrypted": false }
+  "extra": { "trustServerCertificate": true, "encrypted": false },
+  "requestTimeout": 300000
 }

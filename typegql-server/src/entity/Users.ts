@@ -2,6 +2,7 @@ import { Field, ID, ObjectType } from "type-graphql";
 import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Badge } from "./Badges";
 import { Comment } from "./Comments";
+import { Post } from "./Posts";
 
 @Index("PK_Users_Id", ["id"], { unique: true })
 @ObjectType()
@@ -21,7 +22,7 @@ export class User {
 
   @Field()
   @Column("datetime", { name: "CreationDate" })
-  creationDate: Date;
+  creationDate: string;
 
   @Field()
   @Column("nvarchar", { name: "DisplayName", length: 40 })
@@ -70,4 +71,8 @@ export class User {
   @Field(() => [Comment], { nullable: true })
   @OneToMany(() => Comment, (c: Comment) => c.user, { nullable: true })
   comments?: Comment[];
+
+  @Field(() => [Post], { nullable: true })
+  @OneToMany(() => Post, (p: Post) => p.ownerUser, { nullable: true })
+  posts?: Post[];
 }
