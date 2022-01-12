@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ContentBox from "../../components/contentBox";
+import ErrorMessageBox from "../../components/errorMessageBox";
+import LoadingMessageBox from "../../components/loadingMessageBox";
 import Container from "../../components/objects/container";
 import { Head1 } from "../../components/objects/head";
 import Row from "../../components/objects/row";
@@ -37,10 +39,10 @@ export default function Users() {
     <>
       <Row>
         <Container>
-          <Head1>Users ({users && users.length})</Head1>
+          <Head1>Users ({users ? users.length : 0})</Head1>
+            {users === null && <ErrorMessageBox />}
+            {users === undefined && <LoadingMessageBox />}
           <div className="grid grid-cols-1 lg:grid-cols-2 sm:gap-6 mt-6">
-            {users === null && <ContentBox>Something went wrong</ContentBox>}
-            {users === undefined && <ContentBox>Loading users</ContentBox>}
             {users && users.length < 0 && (
               <ContentBox>No users found to display</ContentBox>
             )}

@@ -3,6 +3,7 @@ import React from "react";
 import HeaderLink from "./headerLink";
 
 export default function Header() {
+
   return (
     <header className="grid place-items-center p-5 shadow-md bg-white/75 backdrop-blur-xl text-gray-900 fixed top-0 right-0 left-0 z-50">
       <div className="max-w-5xl w-full flex items-center justify-between px-4 sm:px-6">

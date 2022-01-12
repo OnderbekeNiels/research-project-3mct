@@ -1,6 +1,7 @@
 import React from "react";
 import CommentType from "../models/comment";
 import { Anonymous } from "../models/user";
+import { formateDateToLongNotation, formatToDate } from "../utils/date";
 import ContentBox from "./contentBox";
 
 export default function Comment({comment}: {comment: CommentType}) {
@@ -13,7 +14,7 @@ export default function Comment({comment}: {comment: CommentType}) {
             {comment.user ? comment.user?.displayName : Anonymous.name}
           </span>
           <span className="text-gray-500 ml-1">
-            at {new Date(comment.creationDate).toDateString()}
+            at {formateDateToLongNotation(formatToDate(comment.creationDate))}
           </span>
         </p>
       </ContentBox>

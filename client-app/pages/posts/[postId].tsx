@@ -2,6 +2,8 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Comment from "../../components/comment";
 import ContentBox from "../../components/contentBox";
+import ErrorMessageBox from "../../components/errorMessageBox";
+import LoadingMessageBox from "../../components/loadingMessageBox";
 import Container from "../../components/objects/container";
 import { Head1, Head2 } from "../../components/objects/head";
 import Row from "../../components/objects/row";
@@ -44,6 +46,7 @@ export default function PostDetail() {
     comments {
       id
       text
+      creationDate
       user {
         id
         displayName
@@ -69,8 +72,8 @@ export default function PostDetail() {
     <>
       <Row>
         <Container>
-          {post === null && <ContentBox>Something went wrong</ContentBox>}
-          {post === undefined && <ContentBox>Loading</ContentBox>}
+          {post === null && <ErrorMessageBox/>}
+          {post === undefined && <LoadingMessageBox/>}
           {post && (
             <>
               <Head1>{post.title ? post.title : "Untiteld post"}</Head1>

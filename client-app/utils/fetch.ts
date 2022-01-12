@@ -1,3 +1,6 @@
+import { trace } from "firebase/performance";
+import { perf } from "./firebase";
+
 export enum RestMethodType {
   POST = "POST",
   GET = "GET",
@@ -20,7 +23,7 @@ export const get = async (uri: string) => {
 const post = async (uri: string, body: any) => {
   const response = await fetch(`http://localhost:4000/${uri}`, {
     headers: {
-       'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     method: RestMethodType.POST,
     body: JSON.stringify(body),
@@ -38,15 +41,11 @@ export const query = async (
   query: string,
   variables?: Object
 ): Promise<any> => {
-  const result = await post(
-    "graphql",
-    {
-      operationName: name,
-      query,
-      variables,
-    }
-  );
-
+  const result = await post("graphql", {
+    operationName: name,
+    query,
+    variables,
+  });
   if (result.errors) {
     throw `Could not ${name}`;
   } else {

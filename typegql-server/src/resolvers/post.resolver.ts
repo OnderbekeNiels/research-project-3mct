@@ -17,7 +17,7 @@ export class PostResolver {
     private readonly voteService: VoteService
   ) {}
 
-  ttlCache: number = 3600;
+  ttlCache: number = 60;
 
   @Query(() => [Post])
   async PostsAll(@Ctx() ctx: any) {

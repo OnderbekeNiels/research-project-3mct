@@ -1,7 +1,11 @@
+import { trace } from "firebase/performance";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import Badge from "../../components/badge";
 import ContentBox from "../../components/contentBox";
+import ErrorMessageBox from "../../components/errorMessageBox";
+import LoadingMessageBox from "../../components/loadingMessageBox";
 import NumberBox from "../../components/numberBox";
 import Container from "../../components/objects/container";
 import { Head2 } from "../../components/objects/head";
@@ -13,6 +17,8 @@ import UserType, { Anonymous } from "../../models/user";
 import createMarkup from "../../utils/core";
 import { formateDateToLongNotation, formatToDate } from "../../utils/date";
 import { query } from "../../utils/fetch";
+import { perf } from "../../utils/firebase";
+import { requestState } from "../../utils/store";
 
 export default function UserDetail() {
   const router = useRouter();
@@ -20,7 +26,15 @@ export default function UserDetail() {
   const [user, setUser] = useState<UserType | undefined | null>(undefined);
   const [isOpenAboutMe, setIsOpenAboutMe] = useState<boolean>(false);
 
+  const [request, setRequest] = useRecoilState(requestState);
+
   const getUser = async (id: number) => {
+    //  const t = trace(perf, `fetch-UserById`);
+    //  t.start();
+    setRequest((req) => {
+      return { ...req, requestName: "UserById", requestNestingLevel: 4};
+    });
+    const start = new Date().getTime();
     try {
       const data: UserType = await query(
         `UserById`,
@@ -46,15 +60,37 @@ export default function UserDetail() {
         title
         acceptedAnswerId
         lastEditDate
+        comments{
+          id
+          text
+          creationDate
+          user{
+            id
+            displayName
+          }
+        }
       }
   }
 }`,
         { userId: id }
       );
+
+      const size = new TextEncoder().encode(JSON.stringify(data)).length;
+      setRequest((req) => {
+        return { ...req, requestSize: size / 1024 };
+      });
+      // console.log({size})
+      //  t.incrementMetric("Response Size", size);
+      //  t.incrementMetric("Request Status", 1);
       setUser(data);
     } catch (error) {
+      // t.incrementMetric("Request Status", 0);
       setUser(null);
     }
+    setRequest((req) => {
+      return { ...req, requestTime: new Date().getTime() - start };
+    });
+    //  t.stop();
   };
 
   useEffect(() => {
@@ -65,6 +101,8 @@ export default function UserDetail() {
     <>
       <Row>
         <Container>
+          {user === null && <ErrorMessageBox />}
+          {user === undefined && <LoadingMessageBox />}
           <div className="grid grid-cols-3 gap-6 pt-10">
             {user && (
               <>
@@ -267,6 +305,7 @@ export default function UserDetail() {
                             acceptedAnswerId={p.acceptedAnswerId}
                             answerCount={p.answerCount}
                             lastEditDate={p.lastEditDate}
+                            comments={p.comments}
                           ></PostRow>
                         );
                       })}

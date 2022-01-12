@@ -1,5 +1,7 @@
 // Import the functions you need from the SDKs you need
-import firebase, { initializeApp } from "firebase/app";
+import { initializeApp } from "firebase/app";
+import { getPerformance } from "firebase/performance";
+import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -15,16 +17,11 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_MEASUREMENTID,
 };
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-  // Check that `window` is in scope for the analytics module!
-  if (typeof window !== "undefined") {
-    // Enable analytics. https://firebase.google.com/docs/analytics/get-started
-    if ("measurementId" in firebaseConfig) {
-      firebase.analytics();
-      firebase.performance();
-    }
-  }
-}
+const app = initializeApp(firebaseConfig);
+console.log("called firebase init");
+// Check that `window` is in scope for the analytics module!
 
-export default firebase;
+const analytics = getAnalytics();
+export const perf = getPerformance(app);
+
+export default app;
