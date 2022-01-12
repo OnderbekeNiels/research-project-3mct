@@ -6,8 +6,8 @@
 
 - [x] Onderzoeken welke caching mogelijkheden er zijn.
 - [x] Opzetten JS backend die connect via ORM met db
-- [x] Testen Backend caching met directives in Apollo GQL **! NOT DONE**
-- [ ] Testen Backend caching met Redis cache **WIP**
+- [] Testen Backend caching met directives in Apollo GQL **! NOT DONE**
+- [x] Testen Backend caching met Redis cache
 - [x] Meten resultaten backend
 - [x] Opmaken frontend applicatie in Next.js
 - [x] Frontend testen met normale fetch

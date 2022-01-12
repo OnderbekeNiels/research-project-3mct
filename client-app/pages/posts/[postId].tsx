@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import Comment from "../../components/comment";
 import ContentBox from "../../components/contentBox";
 import ErrorMessageBox from "../../components/errorMessageBox";
@@ -14,6 +15,7 @@ import { Anonymous } from "../../models/user";
 import createMarkup from "../../utils/core";
 import { formateDateToLongNotation, formatToDate } from "../../utils/date";
 import { query } from "../../utils/fetch";
+import { requestState } from "../../utils/store";
 import formatTags from "../../utils/string";
 
 export default function PostDetail() {
@@ -22,7 +24,12 @@ export default function PostDetail() {
 
   const [post, setPost] = useState<PostType | undefined | null>(undefined);
   const [formatedTags, setFormatedTags] = useState<string[]>([]);
+
+  const [request, setRequest] = useRecoilState(requestState);
+
   const getPost = async (id: number) => {
+    const start = new Date().getTime();
+    let dataSize: number = 0;
     try {
       const data: PostType = await query(
         `PostById`,
@@ -57,11 +64,22 @@ export default function PostDetail() {
 }`,
         { postId: id }
       );
+      dataSize = new TextEncoder().encode(JSON.stringify(data)).length / 1024;
       setPost(data);
       data.tags && setFormatedTags(formatTags(data.tags));
     } catch (error) {
       setPost(null);
     }
+
+    setRequest(() => {
+      return {
+        responseTime: new Date().getTime() - start,
+        requestNestingLevel: 3,
+        requestName: "PostById",
+        responseSize: dataSize,
+        description: "Using normal fetch api",
+      };
+    });
   };
 
   useEffect(() => {
@@ -72,8 +90,8 @@ export default function PostDetail() {
     <>
       <Row>
         <Container>
-          {post === null && <ErrorMessageBox/>}
-          {post === undefined && <LoadingMessageBox/>}
+          {post === null && <ErrorMessageBox />}
+          {post === undefined && <LoadingMessageBox />}
           {post && (
             <>
               <Head1>{post.title ? post.title : "Untiteld post"}</Head1>

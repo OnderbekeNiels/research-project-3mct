@@ -1,10 +1,13 @@
 import { Redis } from "ioredis";
 import { logger } from "./logger";
+
+export const globalTTL: number = 20;
+
 export const checkCache = async (
   redisClient: Redis,
   key: string,
-  maxAge: number,
-  callback: Function
+  callback: Function,
+  maxAge: number = globalTTL
 ): Promise<Object | Array<any> | number> => {
   return new Promise((resolve, reject) => {
     redisClient.get(key, async (err, data) => {

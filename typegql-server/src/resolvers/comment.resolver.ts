@@ -16,8 +16,6 @@ export class CommentResolver {
     private readonly userService: UserService
   ) {}
 
-  ttlCache: number = 20;
-
   @Query(() => [Comment])
   async CommentsAll() {
     return await this.commentService.all();
@@ -38,7 +36,6 @@ export class CommentResolver {
     const user = await checkCache(
       ctx.redisClient,
       `user-${comment.userId}`,
-      this.ttlCache,
       async () => {
         return await this.userService.findByArgs(comment.userId);
       }

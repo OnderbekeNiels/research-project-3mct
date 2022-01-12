@@ -19,8 +19,6 @@ export class UserResolver {
     private readonly postService: PostService
   ) {}
 
-  ttlCache: number = 20;
-
   // @Query(() => [User])
   // async UsersAll(@Ctx() ctx: any) {
   //   return await this.userService.all();
@@ -28,14 +26,9 @@ export class UserResolver {
 
   @Query(() => [User])
   async UsersAll(@Ctx() ctx: any) {
-    const users = await checkCache(
-      ctx.redisClient,
-      "allusers",
-      this.ttlCache,
-      async () => {
-        return await this.userService.all();
-      }
-    );
+    const users = await checkCache(ctx.redisClient, "allusers", async () => {
+      return await this.userService.all();
+    });
     return users;
   }
 
@@ -44,7 +37,7 @@ export class UserResolver {
     const user = await checkCache(
       ctx.redisClient,
       `user-${userId}`,
-      this.ttlCache,
+
       async () => {
         return await this.userService.findById(userId);
       }
@@ -53,11 +46,11 @@ export class UserResolver {
   }
 
   @FieldResolver()
-  async badges(@Root() user: User,@Ctx() ctx: any) {
+  async badges(@Root() user: User, @Ctx() ctx: any) {
     const badges = await checkCache(
       ctx.redisClient,
       `badges-from-user-${user.id}`,
-      this.ttlCache,
+
       async () => {
         return await this.badgeService.findAllByArgs({
           userId: user.id,
@@ -70,7 +63,7 @@ export class UserResolver {
 
   // @FieldResolver()
   // async comments(@Root() user: User, @Ctx() ctx: any) {
-  //   return await await this.commentService.findAllByArgs({
+  //   return await this.commentService.findAllByArgs({
   //     userId: user.id,
   //     take: 10,
   //   });
@@ -81,7 +74,6 @@ export class UserResolver {
     const comments = await checkCache(
       ctx.redisClient,
       `comments-from-user-${user.id}`,
-      this.ttlCache,
       async () => {
         return await this.commentService.findAllByArgs({
           userId: user.id,
@@ -105,7 +97,7 @@ export class UserResolver {
     const posts = await checkCache(
       ctx.redisClient,
       `posts-from-user-${user.id}`,
-      this.ttlCache,
+
       async () => {
         return await this.postService.findAllByArgs({
           where: { ownerUserId: user.id },
@@ -114,7 +106,6 @@ export class UserResolver {
             lastEditDate: "DESC",
           },
         });
-        
       }
     );
     return posts;

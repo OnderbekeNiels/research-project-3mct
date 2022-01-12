@@ -17,14 +17,11 @@ export class PostResolver {
     private readonly voteService: VoteService
   ) {}
 
-  ttlCache: number = 60;
-
   @Query(() => [Post])
   async PostsAll(@Ctx() ctx: any) {
     const posts = await checkCache(
       ctx.redisClient,
       "allposts",
-      this.ttlCache,
       async () => {
         return await this.postService.all();
       }
@@ -37,7 +34,6 @@ export class PostResolver {
     const post = await checkCache(
       ctx.redisClient,
       `post-${postId}`,
-      this.ttlCache,
       async () => {
         return await this.postService.findById(postId);
       }
@@ -58,7 +54,6 @@ export class PostResolver {
     const comments = await checkCache(
       ctx.redisClient,
       `comments-from-post-${post.id}`,
-      this.ttlCache,
       async () => {
         return await this.commentService.findAllByArgs({
           where: { postId: post.id },
@@ -73,7 +68,6 @@ export class PostResolver {
     const owner = await checkCache(
       ctx.redisClient,
       `owner-${post.ownerUserId}-from-post-${post.id}`,
-      this.ttlCache,
       async () => {
         return await this.userService.findById(post.ownerUserId);
       }
@@ -86,7 +80,6 @@ export class PostResolver {
     const votes = await checkCache(
       ctx.redisClient,
       `vote-count-from-post-${post.id}`,
-      this.ttlCache,
       async () => {
         return await this.voteService.countByArgs({
           where: { postId: post.id },

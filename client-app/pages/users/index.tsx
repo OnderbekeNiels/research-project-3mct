@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import ContentBox from "../../components/contentBox";
 import ErrorMessageBox from "../../components/errorMessageBox";
 import LoadingMessageBox from "../../components/loadingMessageBox";
@@ -8,11 +9,16 @@ import Row from "../../components/objects/row";
 import User from "../../components/user";
 import UserType from "../../models/user";
 import { query } from "../../utils/fetch";
+import { requestState } from "../../utils/store";
 
 export default function Users() {
   const [users, setUsers] = useState<UserType[] | undefined | null>(undefined);
 
+  const [request, setRequest] = useRecoilState(requestState);
+
   const getUsers = async () => {
+        const start = new Date().getTime();
+        let dataSize: number = 0;
     try {
       const data: UserType[] = await query(
         `UsersAll`,
@@ -25,10 +31,21 @@ export default function Users() {
                     reputation
                 }}`
       );
+      dataSize = new TextEncoder().encode(JSON.stringify(data)).length / 1024;
       setUsers(data);
     } catch (error) {
       setUsers(null);
     }
+
+        setRequest(() => {
+          return {
+            responseTime: new Date().getTime() - start,
+            requestNestingLevel: 1,
+            requestName: "UsersAll",
+            responseSize: dataSize,
+            description: "Using normal fetch api",
+          };
+        });
   };
 
   useEffect(() => {

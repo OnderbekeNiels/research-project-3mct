@@ -31,10 +31,8 @@ export default function UserDetail() {
   const getUser = async (id: number) => {
     //  const t = trace(perf, `fetch-UserById`);
     //  t.start();
-    setRequest((req) => {
-      return { ...req, requestName: "UserById", requestNestingLevel: 4};
-    });
     const start = new Date().getTime();
+    let dataSize: number = 0;
     try {
       const data: UserType = await query(
         `UserById`,
@@ -75,10 +73,7 @@ export default function UserDetail() {
         { userId: id }
       );
 
-      const size = new TextEncoder().encode(JSON.stringify(data)).length;
-      setRequest((req) => {
-        return { ...req, requestSize: size / 1024 };
-      });
+      dataSize = new TextEncoder().encode(JSON.stringify(data)).length / 1024;
       // console.log({size})
       //  t.incrementMetric("Response Size", size);
       //  t.incrementMetric("Request Status", 1);
@@ -87,8 +82,14 @@ export default function UserDetail() {
       // t.incrementMetric("Request Status", 0);
       setUser(null);
     }
-    setRequest((req) => {
-      return { ...req, requestTime: new Date().getTime() - start };
+    setRequest(() => {
+      return {
+        responseTime: new Date().getTime() - start,
+        requestNestingLevel: 4,
+        requestName: "UserById",
+        responseSize: dataSize,
+        description: "Using normal fetch api"
+      };
     });
     //  t.stop();
   };

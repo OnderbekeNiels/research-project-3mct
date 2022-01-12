@@ -12,19 +12,20 @@ import { getPerformance, trace } from "firebase/performance";
 import { perf } from "../../utils/firebase";
 import ErrorMessageBox from "../../components/errorMessageBox";
 import LoadingMessageBox from "../../components/loadingMessageBox";
+import { useRecoilState } from "recoil";
+import { requestState } from "../../utils/store";
 
 const Home: NextPage = () => {
   const [posts, setPosts] = useState<PostType[] | undefined | null>(undefined);
-  const [requestTime, setRequestTime] = useState<number>(0);
+
+  const [request, setRequest] = useRecoilState(requestState);
 
   const getPosts = async () => {
+    const start = new Date().getTime();
+    let dataSize: number = 0;
 
-
-    // Code that you want to trace
-    // ...
     try {
-      const startTime = new Date().getTime();
-      const posts: PostType[] = await query(
+      const data: PostType[] = await query(
         `PostsAll`,
         `query PostsAll {
 PostsAll {
@@ -45,16 +46,20 @@ PostsAll {
   viewCount
 }}`
       );
-      if (posts) {
-        const travelTime = new Date().getTime() - startTime;
-        setRequestTime(travelTime);
-      }
-      setPosts(posts);
+      dataSize = new TextEncoder().encode(JSON.stringify(data)).length / 1024;
+      setPosts(data);
     } catch (error) {
       setPosts(null);
     }
-
-    
+    setRequest(() => {
+      return {
+        responseTime: new Date().getTime() - start,
+        requestNestingLevel: 2,
+        requestName: "PostsAll",
+        responseSize: dataSize,
+        description: "Using normal fetch api",
+      };
+    });
   };
 
   useEffect(() => {
@@ -66,8 +71,7 @@ PostsAll {
       <Row>
         <Container>
           <Head1>
-            Latest posts ({posts ? posts.length : 0}) - Request travel:{" "}
-            {requestTime} ms
+            Latest posts ({posts ? posts.length : 0})
           </Head1>
           <div className="grid sm:gap-6 mt-6">
             {posts === null && <ErrorMessageBox />}
