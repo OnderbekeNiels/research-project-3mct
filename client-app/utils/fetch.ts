@@ -18,7 +18,6 @@ export const get = async (uri: string) => {
 };
 
 const post = async (uri: string, body: any) => {
-  console.log({body})
   const response = await fetch(`http://localhost:4000/${uri}`, {
     headers: {
        'Content-Type': 'application/json',
