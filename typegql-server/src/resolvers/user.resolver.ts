@@ -108,8 +108,11 @@ export class UserResolver {
       this.ttlCache,
       async () => {
         return await this.postService.findAllByArgs({
-          where: {ownerUserId: user.id},
+          where: { ownerUserId: user.id },
           take: 10,
+          order: {
+            lastEditDate: "DESC",
+          },
         });
         
       }

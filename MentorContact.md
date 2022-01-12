@@ -20,4 +20,7 @@
 
 ### Feedback
 
-* 
+* CPU & RAM tonen kan interssant zijn tijdens de demo met reallife tabs open, disclaimer geven ook omdat dit niet super representatief is
+* 4 Levels diep is voldoende
+* Eens kijken hoe je data fresh houd, maar volledige crud niet nodig per onderdeel
+* Gebruik maken van algemene logger (vb. firebase performance logger) om data te verzamelen  

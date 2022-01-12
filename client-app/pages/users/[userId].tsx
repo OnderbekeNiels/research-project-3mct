@@ -255,7 +255,7 @@ export default function UserDetail() {
                   </div>
                 </ContentBox>
                 <ContentBox className="col-span-2">
-                  <Head2>Top Posts</Head2>
+                  <Head2>Latest Posts</Head2>
                   <div className="grid gap-2">
                     {user.posts &&
                       user.posts?.map((p: PostType) => {

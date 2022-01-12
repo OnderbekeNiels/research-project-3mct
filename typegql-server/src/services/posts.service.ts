@@ -14,6 +14,9 @@ export class PostService {
   async all() {
     return await this.postRepository.find({
       take: 50,
+      order: {
+        lastEditDate: "DESC",
+      },
     });
   }
 
