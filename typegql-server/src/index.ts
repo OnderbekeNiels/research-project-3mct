@@ -19,6 +19,7 @@ import { ApolloServerPluginCacheControl } from "apollo-server-core";
 import { BaseRedisCache } from "apollo-server-cache-redis";
 import { logger } from "./utils/logger";
 import { Response } from "express";
+import cors = require("cors");
 const Redis = require("ioredis");
 
 useContainer(Container);
@@ -105,6 +106,9 @@ useContainer(Container);
 
   // bron: https://gist.github.com/benawad/7abb41c179b050b476fdad4e5a561161
   const app = Express();
+
+  app.use(cors());
+
   app.use("/graphql", (req, res, next) => {
       const startHrTime = process.hrtime();
   
