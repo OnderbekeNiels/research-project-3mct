@@ -17,11 +17,10 @@ import { requestState } from "../../utils/store";
 import { gql, useQuery } from "@apollo/client";
 
 const Home: NextPage = () => {
+  // ! State
   const [posts, setPosts] = useState<PostType[] | undefined | null>(undefined);
-
   const [request, setRequest] = useRecoilState(requestState);
-
-  const queryGQL = `query PostsAll {
+   const queryGQL = `query PostsAll {
 PostsAll {
   id
   answerCount
@@ -39,53 +38,31 @@ PostsAll {
   title
   viewCount
 }}`;
-
   const GETALLPOSTS = gql(queryGQL);
   const { loading, error, data } = useQuery(GETALLPOSTS);
-  const getPosts = async () => {
-    const start = new Date().getTime();
-    let dataSize: number = 0;
+  
+  // ! Lifecycle
+ 
 
-    try {
-      const data: PostType[] = await query(`PostsAll`, queryGQL);
-      dataSize = new TextEncoder().encode(JSON.stringify(data)).length / 1024;
-      setPosts(data);
-    } catch (error) {
-      setPosts(null);
-    }
-    setRequest(() => {
-      return {
-        responseTime: new Date().getTime() - start,
-        requestNestingLevel: 2,
-        requestName: "PostsAll",
-        responseSize: dataSize,
-        description: "Using normal fetch api",
-      };
-    });
-  };
+// const dataSize = 0;
+// let start = new Date().getTime();
 
-  const dataSize = 0;
-  let start = 0;
 
-  useEffect(() => {
-    start = new Date().getTime();
-    console.log({start})
-  }, []);
-
-  useEffect(() => {
-    if (data)
-      setRequest(() => {
-        return {
-          responseTime: new Date().getTime() - start,
-          requestNestingLevel: 2,
-          requestName: "PostsAll",
-          responseSize:
-            new TextEncoder().encode(JSON.stringify(data.PostsAll)).length /
-            1024,
-          description: "Using apollo client",
-        };
-      });
-  }, [data]);
+  // useEffect(() => {
+  //   if (data){
+  //     setRequest(() => {
+  //       return {
+  //         responseTime: new Date().getTime() - start,
+  //         requestNestingLevel: 2,
+  //         requestName: "PostsAll",
+  //         responseSize:
+  //           new TextEncoder().encode(JSON.stringify(data.PostsAll)).length /
+  //           1024,
+  //         description: "Using apollo client",
+  //       };
+  //     });
+  //   }
+  // }, [data]);
 
   return (
     <>
@@ -105,17 +82,6 @@ PostsAll {
               data.PostsAll.map((p: PostType) => (
                 <Post key={p.id.toString()} post={p as PostArgs}></Post>
               ))}
-            {/* ! Normal way */}
-            {/* {posts === null && <ErrorMessageBox />}
-            {posts === undefined && <LoadingMessageBox />}
-            {posts && posts.length < 0 && (
-              <ContentBox>No posts found to display</ContentBox>
-            )}
-            {posts &&
-              posts.length > 0 &&
-              posts.map((p: PostType) => (
-                <Post key={p.id.toString()} post={p as PostArgs}></Post>
-              ))} */}
           </div>
         </Container>
       </Row>
