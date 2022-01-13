@@ -66,6 +66,9 @@
 #### Bevindingen
 ##### Algemeen
 ##### Positief
+- Apollo client is makkelijk op te zetten in react
+- In apollo client moet de query string direct mee gegeven worden aan gql, en niet eerst via variabele, anders werkt de cache niet
+
 ##### Negatief
 #### Bronnen
 ### CDN

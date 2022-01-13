@@ -7,23 +7,17 @@ import app from "../utils/firebase";
 import { atom, RecoilRoot } from "recoil";
 import React from "react";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import client from "../utils/apollo";
 
 function MyApp({ Component, pageProps }: AppProps) {
-
-  const client = new ApolloClient({
-    uri: process.env.NEXT_PUBLIC_BACKEND_URL,
-    cache: new InMemoryCache(),
-  });
-
   return (
-     <ApolloProvider client={client}>
-    <RecoilRoot>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </RecoilRoot>
-
-     </ApolloProvider>
+    <ApolloProvider client={client}>
+      <RecoilRoot>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </RecoilRoot>
+    </ApolloProvider>
   );
 }
 

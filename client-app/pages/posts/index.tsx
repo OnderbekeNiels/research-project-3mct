@@ -23,6 +23,8 @@ const Home: NextPage = () => {
   // ! State
   const [posts, setPosts] = useState<PostType[] | undefined | null>(undefined);
   const [request, setRequest] = useRecoilState(requestState);
+
+  // ! werkt niet 
   const queryGQL = `query PostsAll {
 PostsAll {
   id
@@ -41,7 +43,29 @@ PostsAll {
   title
   viewCount
 }}`;
-  const GETALLPOSTS = gql(queryGQL);
+
+// ! werkt wel
+  const GETALLPOSTS = gql`
+    query PostsAll {
+      PostsAll {
+        id
+        answerCount
+        votesCount
+        body
+        commentCount
+        ownerUser {
+          id
+          displayName
+          upVotes
+          downVotes
+          reputation
+        }
+        tags
+        title
+        viewCount
+      }
+    }
+  `;
   const { loading, error, data } = useQuery(GETALLPOSTS);
 
   // ! Lifecycle

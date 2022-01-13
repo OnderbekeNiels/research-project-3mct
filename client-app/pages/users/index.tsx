@@ -1,3 +1,4 @@
+import { gql, useQuery } from "@apollo/client";
 import React, { Profiler, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import ContentBox from "../../components/contentBox";
@@ -12,72 +13,48 @@ import { query } from "../../utils/fetch";
 import { requestState } from "../../utils/store";
 
 export default function Users() {
-  const [users, setUsers] = useState<UserType[] | undefined | null>(undefined);
-
   const [request, setRequest] = useRecoilState(requestState);
+
+    const GETALLPOSTS = gql`
+      query UsersAll {
+        UsersAll {
+          id
+          displayName
+          upVotes
+          downVotes
+          reputation
+        }
+      }
+    `;
+    const { loading, error, data } = useQuery(GETALLPOSTS);
 
   const [start, setStart] = useState(new Date().getTime());
 
   useEffect(() => {
-    if (users) {
+    if (data) {
       console.log(
         `Start: ${start} - Now: ${new Date().getTime()} = ${
           new Date().getTime() - start
         } ms`
       );
     }
-  }, [users]);
+  }, [data]);
 
-  const getUsers = async () => {
-    const start = new Date().getTime();
-    let dataSize: number = 0;
-    try {
-      const data: UserType[] = await query(
-        `UsersAll`,
-        `query UsersAll {
-                UsersAll {
-                    id
-                    displayName
-                    upVotes
-                    downVotes
-                    reputation
-                }}`
-      );
-      dataSize = new TextEncoder().encode(JSON.stringify(data)).length / 1024;
-      setUsers(data);
-    } catch (error) {
-      setUsers(null);
-    }
-
-    setRequest(() => {
-      return {
-        responseTime: new Date().getTime() - start,
-        requestNestingLevel: 1,
-        requestName: "UsersAll",
-        responseSize: dataSize,
-        description: "Using normal fetch api",
-      };
-    });
-  };
-
-  useEffect(() => {
-    getUsers();
-  }, []);
 
   return (
     <>
       <Row>
         <Container>
-          <Head1>Users ({users ? users.length : 0})</Head1>
-          {users === null && <ErrorMessageBox />}
-          {users === undefined && <LoadingMessageBox />}
+          <Head1>Users ({data ? data.UsersAll.length : 0})</Head1>
+          {error && <ErrorMessageBox />}
+          {loading && <LoadingMessageBox />}
           <div className="grid grid-cols-1 lg:grid-cols-2 sm:gap-6 mt-6">
-            {users && users.length < 0 && (
+            {data && data.UsersAll.length < 0 && (
               <ContentBox>No users found to display</ContentBox>
             )}
-            {users &&
-              users.length > 0 &&
-              users.map((u: UserType) => (
+            {data &&
+              data.UsersAll.length > 0 &&
+              data.UsersAll.map((u: UserType) => (
                 <User
                   key={u.id.toString()}
                   id={u.id}
