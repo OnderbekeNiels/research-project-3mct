@@ -27,6 +27,18 @@ export default function PostDetail() {
 
   const [request, setRequest] = useRecoilState(requestState);
 
+      const [start, setStart] = useState(new Date().getTime());
+
+      useEffect(() => {
+        if (post) {
+          console.log(
+            `Start: ${start} - Now: ${new Date().getTime()} = ${
+              new Date().getTime() - start
+            } ms`
+          );
+        }
+      }, [post]);
+
   const getPost = async (id: number) => {
     const start = new Date().getTime();
     let dataSize: number = 0;

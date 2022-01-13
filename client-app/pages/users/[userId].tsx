@@ -28,6 +28,18 @@ export default function UserDetail() {
 
   const [request, setRequest] = useRecoilState(requestState);
 
+    const [start, setStart] = useState(new Date().getTime());
+
+    useEffect(() => {
+      if (user) {
+        console.log(
+          `Start: ${start} - Now: ${new Date().getTime()} = ${
+            new Date().getTime() - start
+          } ms`
+        );
+      }
+    }, [user]);
+
   const getUser = async (id: number) => {
     //  const t = trace(perf, `fetch-UserById`);
     //  t.start();

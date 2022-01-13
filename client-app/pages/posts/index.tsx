@@ -1,5 +1,8 @@
 import type { NextPage } from "next";
-import React, { useContext, useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+} from "react";
 import ContentBox from "../../components/contentBox";
 import Container from "../../components/objects/container";
 import { Head1 } from "../../components/objects/head";
@@ -20,7 +23,7 @@ const Home: NextPage = () => {
   // ! State
   const [posts, setPosts] = useState<PostType[] | undefined | null>(undefined);
   const [request, setRequest] = useRecoilState(requestState);
-   const queryGQL = `query PostsAll {
+  const queryGQL = `query PostsAll {
 PostsAll {
   id
   answerCount
@@ -40,13 +43,20 @@ PostsAll {
 }}`;
   const GETALLPOSTS = gql(queryGQL);
   const { loading, error, data } = useQuery(GETALLPOSTS);
-  
+
   // ! Lifecycle
- 
 
-// const dataSize = 0;
-// let start = new Date().getTime();
+  const [start, setStart] = useState(new Date().getTime());
 
+  useEffect(() => {
+    if (data != undefined) {
+      console.log(
+        `Start: ${start} - Now: ${new Date().getTime()} = ${
+          new Date().getTime() - start
+        } ms`
+      );
+    }
+  }, [data]);
 
   // useEffect(() => {
   //   if (data){
@@ -66,6 +76,7 @@ PostsAll {
 
   return (
     <>
+      {" "}
       <Row>
         <Container>
           <Head1>Latest posts ({data ? data.PostsAll.length : 0})</Head1>

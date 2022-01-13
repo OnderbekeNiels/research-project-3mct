@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Profiler, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import ContentBox from "../../components/contentBox";
 import ErrorMessageBox from "../../components/errorMessageBox";
@@ -16,9 +16,21 @@ export default function Users() {
 
   const [request, setRequest] = useRecoilState(requestState);
 
+  const [start, setStart] = useState(new Date().getTime());
+
+  useEffect(() => {
+    if (users) {
+      console.log(
+        `Start: ${start} - Now: ${new Date().getTime()} = ${
+          new Date().getTime() - start
+        } ms`
+      );
+    }
+  }, [users]);
+
   const getUsers = async () => {
-        const start = new Date().getTime();
-        let dataSize: number = 0;
+    const start = new Date().getTime();
+    let dataSize: number = 0;
     try {
       const data: UserType[] = await query(
         `UsersAll`,
@@ -37,15 +49,15 @@ export default function Users() {
       setUsers(null);
     }
 
-        setRequest(() => {
-          return {
-            responseTime: new Date().getTime() - start,
-            requestNestingLevel: 1,
-            requestName: "UsersAll",
-            responseSize: dataSize,
-            description: "Using normal fetch api",
-          };
-        });
+    setRequest(() => {
+      return {
+        responseTime: new Date().getTime() - start,
+        requestNestingLevel: 1,
+        requestName: "UsersAll",
+        responseSize: dataSize,
+        description: "Using normal fetch api",
+      };
+    });
   };
 
   useEffect(() => {
@@ -57,8 +69,8 @@ export default function Users() {
       <Row>
         <Container>
           <Head1>Users ({users ? users.length : 0})</Head1>
-            {users === null && <ErrorMessageBox />}
-            {users === undefined && <LoadingMessageBox />}
+          {users === null && <ErrorMessageBox />}
+          {users === undefined && <LoadingMessageBox />}
           <div className="grid grid-cols-1 lg:grid-cols-2 sm:gap-6 mt-6">
             {users && users.length < 0 && (
               <ContentBox>No users found to display</ContentBox>
