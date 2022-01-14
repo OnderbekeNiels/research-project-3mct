@@ -28,7 +28,7 @@ useContainer(Container);
   const connectionOptions: ConnectionOptions = await getConnectionOptions();
   createConnection();
 
-  // Schema definition
+  // Schema definition 
   // const typeDefs = gql`
   //   enum CacheControlScope {
   //     PUBLIC
