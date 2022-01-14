@@ -21,7 +21,6 @@ import { gql, useQuery } from "@apollo/client";
 
 const Home: NextPage = () => {
   // ! State
-  const [posts, setPosts] = useState<PostType[] | undefined | null>(undefined);
   const [request, setRequest] = useRecoilState(requestState);
 
   // ! werkt niet 
@@ -82,25 +81,8 @@ PostsAll {
     }
   }, [data]);
 
-  // useEffect(() => {
-  //   if (data){
-  //     setRequest(() => {
-  //       return {
-  //         responseTime: new Date().getTime() - start,
-  //         requestNestingLevel: 2,
-  //         requestName: "PostsAll",
-  //         responseSize:
-  //           new TextEncoder().encode(JSON.stringify(data.PostsAll)).length /
-  //           1024,
-  //         description: "Using apollo client",
-  //       };
-  //     });
-  //   }
-  // }, [data]);
-
   return (
     <>
-      {" "}
       <Row>
         <Container>
           <Head1>Latest posts ({data ? data.PostsAll.length : 0})</Head1>

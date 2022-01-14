@@ -14,22 +14,22 @@ import { requestState } from "../../utils/store";
 
 export default function Users() {
   const [request, setRequest] = useRecoilState(requestState);
-
-    const GETALLPOSTS = gql`
-      query UsersAll {
-        UsersAll {
-          id
-          displayName
-          upVotes
-          downVotes
-          reputation
-        }
-      }
-    `;
-    const { loading, error, data } = useQuery(GETALLPOSTS);
-
   const [start, setStart] = useState(new Date().getTime());
 
+  
+  const GETALLPOSTS = gql`
+  query UsersAll {
+    UsersAll {
+      id
+      displayName
+      upVotes
+      downVotes
+      reputation
+    }
+  }
+  `;
+  const { loading, error, data } = useQuery(GETALLPOSTS);
+  
   useEffect(() => {
     if (data) {
       console.log(
@@ -39,8 +39,8 @@ export default function Users() {
       );
     }
   }, [data]);
-
-
+  
+  
   return (
     <>
       <Row>
