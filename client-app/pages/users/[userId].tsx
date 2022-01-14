@@ -14,6 +14,7 @@ import Row from "../../components/objects/row";
 import PostRow from "../../components/postRow";
 import BadgeType from "../../models/badge";
 import PostType from "../../models/post";
+import { Anonymous } from "../../models/user";
 import createMarkup from "../../utils/core";
 import { formateDateToLongNotation, formatToDate } from "../../utils/date";
 import { requestState } from "../../utils/store";
@@ -63,6 +64,7 @@ export default function UserDetail() {
   `;
   const { loading, error, data } = useQuery(GETUSERBYID, {
     variables: { userId: userId ? +userId : undefined },
+    fetchPolicy: "no-cache",
   });
 
   useEffect(() => {

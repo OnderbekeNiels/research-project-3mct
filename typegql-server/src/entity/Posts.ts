@@ -1,8 +1,9 @@
-import { Field, ID, ObjectType } from "type-graphql";
+import { Directive, Field, ID, ObjectType } from "type-graphql";
 import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Comment } from "./Comments";
 import { User } from "./Users";
 
+@Directive("@cacheControl(maxAge: 69)")
 @Index("PK_Posts_Id", ["id"], { unique: true })
 @ObjectType()
 @Entity("Posts", { schema: "dbo" })

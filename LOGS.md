@@ -64,6 +64,8 @@
 #### Bronnen
 ### Frontend
 #### Bevindingen
+##### Algemeen
+##### Positief
 ##### Apollo client
 - Zeer snel
 - Makkelijk op te zetten
@@ -71,8 +73,10 @@
 - Cached volgens __typename & id => houd per geneste data ook bij & merged wanneer er nieuwe bij komt
 - Opletten dat cache niet te veel geheugen inneemt hiermee
 - 4 options kwa cache control, zeer makkelijk in gebruik
-##### Algemeen
-##### Positief
+##### Apollo client persisted queries
+- Makkelijk op te zetten
+- Controleer baar in network tab
+- Stuurt niet altijd een GET req ? Soms bij reload enkel posts?
 ##### Apollo client
 - Apollo client is makkelijk op te zetten in react
 - In apollo client moet de query string direct mee gegeven worden aan gql, en niet eerst via variabele, anders werkt de cache niet

@@ -28,7 +28,7 @@ export default function Users() {
     }
   }
   `;
-  const { loading, error, data } = useQuery(GETALLPOSTS);
+  const { loading, error, data } = useQuery(GETALLPOSTS, {fetchPolicy:"no-cache"});
   
   useEffect(() => {
     if (data) {

@@ -28,43 +28,43 @@ useContainer(Container);
   const connectionOptions: ConnectionOptions = await getConnectionOptions();
   createConnection();
 
-  // Schema definition 
-  // const typeDefs = gql`
-  //   enum CacheControlScope {
-  //     PUBLIC
-  //     PRIVATE
-  //   }
+  // Schema definition
+  const typeDefs = gql`
+    enum CacheControlScope {
+      PUBLIC
+      PRIVATE
+    }
 
-  //   directive @cacheControl(
-  //     maxAge: Int
-  //     scope: CacheControlScope
-  //     inheritMaxAge: Boolean
-  //   ) on FIELD_DEFINITION | OBJECT | INTERFACE | UNION
+    directive @cacheControl(
+      maxAge: Int
+      scope: CacheControlScope
+      inheritMaxAge: Boolean
+    ) on FIELD_DEFINITION | OBJECT | INTERFACE | UNION
 
-  //   type User @cacheControl(maxAge: 30) {
-  //     id: ID!
-  //     displayName: String
-  //     location: String
-  //   }
+    type Userd @cacheControl(maxAge: 30) {
+      id: ID!
+      displayName: String
+      location: String
+    }
 
-  //   type Query {
-  //     UsersAll: [User]
-  //   }
-  // `;
+    type Query {
+      UsersAlld: [Userd]
+    }
+  `;
 
-  // // Resolver map
-  // const resolvers = {
-  //   Query: {
-  //     UsersAll(_: any, { id }: any, ctx: any, info: any) {
-  //         console.log({ _ });
-  //       console.log({ctx})
-  //       console.log({ info });
-  //       const repository = getRepository(User);
-  //       // info.cacheControl.setCacheHint({ maxAge: 20, scope: "PUBLIC" });
-  //       return repository.find({take: 2});
-  //     },
-  //   },
-  // };
+  // Resolver map
+  const resolvers = {
+    Query: {
+      UsersAlld(_: any, { id }: any, ctx: any, info: any) {
+          console.log({ _ });
+        console.log({ctx})
+        console.log({ info });
+        const repository = getRepository(User);
+        // info.cacheControl.setCacheHint({ maxAge: 20, scope: "PUBLIC" });
+        return repository.find({take: 2});
+      },
+    },
+  };
 
   // ! Type gql way
   const schema = await buildSchema({
@@ -72,12 +72,28 @@ useContainer(Container);
     container: Container,
   });
 
+  // SchemaDirectiveVisitor.visitSchemaDirectives(schema, {
+  //   sample: "@cacheControl(maxAge: 30)",
+  // });
+
   // todo: redis password as env
   const apolloServer = new ApolloServer({
     schema,
-    context: ({ req, res }) => ({ req, res, redisClient: new Redis({
+      plugins: [
+        ApolloServerPluginCacheControl({
+          // Cache everything for 0 second by default.
+          defaultMaxAge: 5,
+          // Don't send the `cache-control` response header.
+          calculateHttpHeaders: true,
+        }),
+      ],
+    context: ({ req, res }) => ({
+      req,
+      res,
+      redisClient: new Redis({
         password: "mqsdfhmjkjKJFapaekrJqq",
-      }) }),
+      }),
+    }),
   });
 
   // const apolloServer = new ApolloServer({
@@ -109,29 +125,30 @@ useContainer(Container);
 
   app.use(cors());
 
-  app.use("/graphql", (req, res, next) => {
-      const startHrTime = process.hrtime();
-  
-      res.on("finish", () => {
-        if (
-          req.body &&
-          req.body.operationName &&
-          req.body.operationName != "IntrospectionQuery"
-        ) {
-          const elapsedHrTime = process.hrtime(startHrTime);
-          const elapsedTimeInMs =
-            elapsedHrTime[0] * 1000 + elapsedHrTime[1] / 1e6;
-          logger.info({
-            type: "timing",
-            name: req.body.operationName,
-            ms: elapsedTimeInMs,
-          });
-        }
-      });
-  
-      next();
-  });
+  app.use("/graphql*", (req, res, next) => {
+    const startHrTime = process.hrtime();
 
+    res.on("finish", () => {
+      if (req.body) {
+        if (
+          req.body.operationName &&
+          req.body.operationName == "IntrospectionQuery"
+        )
+          return;
+        const elapsedHrTime = process.hrtime(startHrTime);
+        const elapsedTimeInMs =
+          elapsedHrTime[0] * 1000 + elapsedHrTime[1] / 1e6;
+        logger.info({
+          type: "timing",
+          method: req.method,
+          name: req.body.operationName || "persisted query",
+          ms: elapsedTimeInMs,
+        });
+      }
+    });
+
+    next();
+  });
 
   await apolloServer.start();
   apolloServer.applyMiddleware({ app });

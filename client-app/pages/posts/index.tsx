@@ -1,8 +1,5 @@
 import type { NextPage } from "next";
-import React, {
-  useEffect,
-  useState,
-} from "react";
+import React, { useEffect, useState } from "react";
 import ContentBox from "../../components/contentBox";
 import Container from "../../components/objects/container";
 import { Head1 } from "../../components/objects/head";
@@ -23,7 +20,7 @@ const Home: NextPage = () => {
   // ! State
   const [request, setRequest] = useRecoilState(requestState);
 
-  // ! werkt niet 
+  // ! werkt niet
   const queryGQL = `query PostsAll {
 PostsAll {
   id
@@ -43,7 +40,7 @@ PostsAll {
   viewCount
 }}`;
 
-// ! werkt wel
+  // ! werkt wel
   const GETALLPOSTS = gql`
     query PostsAll {
       PostsAll {
@@ -65,7 +62,9 @@ PostsAll {
       }
     }
   `;
-  const { loading, error, data } = useQuery(GETALLPOSTS);
+  const { loading, error, data } = useQuery(GETALLPOSTS, {
+    fetchPolicy: "no-cache",
+  });
 
   // ! Lifecycle
 

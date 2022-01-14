@@ -18,6 +18,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.2",
     "graphql": "^15.8.0",
+    "graphql-tools": "^8.2.0",
     "ioredis": "^4.28.2",
     "mssql": "^7.3.0",
     "pino": "^7.6.2",
