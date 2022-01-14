@@ -6,7 +6,7 @@
 
 - [x] Onderzoeken welke caching mogelijkheden er zijn.
 - [x] Opzetten JS backend die connect via ORM met db
-- [] Testen Backend caching met directives in Apollo GQL **! NOT DONE**
+- [ ] Testen Backend caching met directives in Apollo GQL **! NOT DONE**
 - [x] Testen Backend caching met Redis cache
 - [x] Meten resultaten backend
 - [x] Opmaken frontend applicatie in Next.js
@@ -64,11 +64,21 @@
 #### Bronnen
 ### Frontend
 #### Bevindingen
+##### Apollo client
+- Zeer snel
+- Makkelijk op te zetten
+- Handig met useQuery method
+- Cached volgens __typename & id => houd per geneste data ook bij & merged wanneer er nieuwe bij komt
+- Opletten dat cache niet te veel geheugen inneemt hiermee
+- 4 options kwa cache control, zeer makkelijk in gebruik
 ##### Algemeen
 ##### Positief
+##### Apollo client
 - Apollo client is makkelijk op te zetten in react
 - In apollo client moet de query string direct mee gegeven worden aan gql, en niet eerst via variabele, anders werkt de cache niet
-
+- Goed dev tool in chrome beschikbaar
+- Wanneer de cache gebruikt word zie je je data kwasie direct zonder zelf de loader te zien.
+- Bij de hooks om data te fetchen heb je direct een error, loading & data destructuring die het heel developper friendly maken.
 ##### Negatief
 #### Bronnen
 ### CDN
