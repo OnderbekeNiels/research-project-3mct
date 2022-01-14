@@ -1,3 +1,4 @@
+import { gql, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
@@ -22,30 +23,11 @@ export default function PostDetail() {
   const router = useRouter();
   const { postId } = router.query;
 
-  const [post, setPost] = useState<PostType | undefined | null>(undefined);
-  const [formatedTags, setFormatedTags] = useState<string[]>([]);
-
   const [request, setRequest] = useRecoilState(requestState);
 
-      const [start, setStart] = useState(new Date().getTime());
+  const [start, setStart] = useState(new Date().getTime());
 
-      useEffect(() => {
-        if (post) {
-          console.log(
-            `Start: ${start} - Now: ${new Date().getTime()} = ${
-              new Date().getTime() - start
-            } ms`
-          );
-        }
-      }, [post]);
-
-  const getPost = async (id: number) => {
-    const start = new Date().getTime();
-    let dataSize: number = 0;
-    try {
-      const data: PostType = await query(
-        `PostById`,
-        `query PostById($postId: Float!) {
+  const GETPOSTBYID = gql`query PostById($postId: Float!) {
   PostById(postId: $postId) {
         id
     answerCount
@@ -73,61 +55,55 @@ export default function PostDetail() {
       creationDate
     }
   }
-}`,
-        { postId: id }
-      );
-      dataSize = new TextEncoder().encode(JSON.stringify(data)).length / 1024;
-      setPost(data);
-      data.tags && setFormatedTags(formatTags(data.tags));
-    } catch (error) {
-      setPost(null);
-    }
+}`;
+  const { loading, error, data } = useQuery(GETPOSTBYID, {
+    variables: { postId: postId  ? +postId : undefined},
+  });
 
-    setRequest(() => {
-      return {
-        responseTime: new Date().getTime() - start,
-        requestNestingLevel: 3,
-        requestName: "PostById",
-        responseSize: dataSize,
-        description: "Using normal fetch api",
-      };
-    });
-  };
 
   useEffect(() => {
-    if (postId) getPost(+postId);
-  }, [postId]);
+    if (data) {
+      console.log(
+        `Start: ${start} - Now: ${new Date().getTime()} = ${
+          new Date().getTime() - start
+        } ms`
+      );
+    }
+  }, [data]);
+
 
   return (
     <>
       <Row>
         <Container>
-          {post === null && <ErrorMessageBox />}
-          {post === undefined && <LoadingMessageBox />}
-          {post && (
+          {error && <ErrorMessageBox />}
+          {loading && <LoadingMessageBox />}
+          {data && (
             <>
-              <Head1>{post.title ? post.title : "Untiteld post"}</Head1>
+              <Head1>
+                {data.PostById.title ? data.PostById.title : "Untiteld post"}
+              </Head1>
               <ul className="flex space-x-4 text-sm">
                 <li>
                   Asked
                   <span className="font-bold text-orange-600 ml-1">
-                    {post.ownerUser
-                      ? post.ownerUser.displayName
+                    {data.PostById.ownerUser
+                      ? data.PostById.ownerUser.displayName
                       : Anonymous.name}
                   </span>
                 </li>
                 <li>
                   Viewed
                   <span className="font-bold text-orange-600 ml-1">
-                    {post.viewCount}
+                    {data.PostById.viewCount}
                   </span>
                 </li>
                 <li>
                   Last edit
                   <span className="font-bold text-orange-600 ml-1">
-                    {post.lastEditDate
+                    {data.PostById.lastEditDate
                       ? formateDateToLongNotation(
-                          formatToDate(post.lastEditDate)
+                          formatToDate(data.PostById.lastEditDate)
                         )
                       : "Not available"}
                   </span>
@@ -135,19 +111,19 @@ export default function PostDetail() {
               </ul>
               <Post
                 className="mt-6"
-                post={post as PostArgs}
+                post={data.PostById as PostArgs}
                 detailMode={true}
               ></Post>
             </>
           )}
         </Container>
       </Row>
-      {post && post.comments && post.comments.length > 0 && (
+      {data && data.PostById.comments && data.PostById.comments.length > 0 && (
         <Row className="mt-4 sm:mt-6 md:mt-10">
           <Container>
             <Head2>Comments</Head2>
             <div className="grid gap-2">
-              {post.comments.map((c: CommentType) => {
+              {data.PostById.comments.map((c: CommentType) => {
                 return <Comment comment={c} key={c.id}></Comment>;
               })}
             </div>

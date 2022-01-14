@@ -1,3 +1,4 @@
+import { gql, useQuery } from "@apollo/client";
 import { trace } from "firebase/performance";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -13,111 +14,75 @@ import Row from "../../components/objects/row";
 import PostRow from "../../components/postRow";
 import BadgeType from "../../models/badge";
 import PostType from "../../models/post";
-import UserType, { Anonymous } from "../../models/user";
 import createMarkup from "../../utils/core";
 import { formateDateToLongNotation, formatToDate } from "../../utils/date";
-import { query } from "../../utils/fetch";
-import { perf } from "../../utils/firebase";
 import { requestState } from "../../utils/store";
 
 export default function UserDetail() {
   const router = useRouter();
   const { userId } = router.query;
-  const [user, setUser] = useState<UserType | undefined | null>(undefined);
   const [isOpenAboutMe, setIsOpenAboutMe] = useState<boolean>(false);
-
   const [request, setRequest] = useRecoilState(requestState);
+  const [start, setStart] = useState(new Date().getTime());
 
-    const [start, setStart] = useState(new Date().getTime());
-
-    useEffect(() => {
-      if (user) {
-        console.log(
-          `Start: ${start} - Now: ${new Date().getTime()} = ${
-            new Date().getTime() - start
-          } ms`
-        );
-      }
-    }, [user]);
-
-  const getUser = async (id: number) => {
-    //  const t = trace(perf, `fetch-UserById`);
-    //  t.start();
-    const start = new Date().getTime();
-    let dataSize: number = 0;
-    try {
-      const data: UserType = await query(
-        `UserById`,
-        `query UserById($userId: Float!) {
-  UserById(userId: $userId) {
-    id
-    aboutMe
-    age
-    creationDate
-    displayName
-    downVotes
-    location
-    reputation
-    upVotes
-    badges {
-      id
-      name
-    }
-    views
-    posts {
+  const GETUSERBYID = gql`
+    query UserById($userId: Float!) {
+      UserById(userId: $userId) {
         id
-        answerCount
-        title
-        acceptedAnswerId
-        lastEditDate
-        comments{
+        aboutMe
+        age
+        creationDate
+        displayName
+        downVotes
+        location
+        reputation
+        upVotes
+        badges {
           id
-          text
-          creationDate
-          user{
+          name
+        }
+        views
+        posts {
+          id
+          answerCount
+          title
+          acceptedAnswerId
+          lastEditDate
+          comments {
             id
-            displayName
+            text
+            creationDate
+            user {
+              id
+              displayName
+            }
           }
         }
       }
-  }
-}`,
-        { userId: id }
-      );
-
-      dataSize = new TextEncoder().encode(JSON.stringify(data)).length / 1024;
-      // console.log({size})
-      //  t.incrementMetric("Response Size", size);
-      //  t.incrementMetric("Request Status", 1);
-      setUser(data);
-    } catch (error) {
-      // t.incrementMetric("Request Status", 0);
-      setUser(null);
     }
-    setRequest(() => {
-      return {
-        responseTime: new Date().getTime() - start,
-        requestNestingLevel: 4,
-        requestName: "UserById",
-        responseSize: dataSize,
-        description: "Using normal fetch api"
-      };
-    });
-    //  t.stop();
-  };
+  `;
+  const { loading, error, data } = useQuery(GETUSERBYID, {
+    variables: { userId: userId ? +userId : undefined },
+  });
 
   useEffect(() => {
-    if (userId) getUser(+userId);
-  }, [userId]);
+    if (data) {
+      console.log(
+        `Start: ${start} - Now: ${new Date().getTime()} = ${
+          new Date().getTime() - start
+        } ms`
+      );
+    }
+  }, [data]);
 
   return (
     <>
       <Row>
         <Container>
-          {user === null && <ErrorMessageBox />}
-          {user === undefined && <LoadingMessageBox />}
+          {error && <ErrorMessageBox />}
+          {loading && <LoadingMessageBox />}
           <div className="grid grid-cols-3 gap-6 pt-10">
-            {user && (
+            {data && (
               <>
                 <ContentBox className="col-span-2 relative">
                   <div className="aspect-square w-28 rounded-full grid place-items-center bg-orange-50 border-4 border-orange-500 absolute -top-10">
@@ -136,9 +101,11 @@ export default function UserDetail() {
                   </div>
                   <div className="mt-[calc(7rem-2.5rem)]">
                     <Head2>
-                      {user.displayName ? user.displayName : Anonymous.name}
+                      {data.UserById.displayName
+                        ? data.UserById.displayName
+                        : Anonymous.name}
                     </Head2>
-                    {user.aboutMe && (
+                    {data.UserById.aboutMe && (
                       <div
                         className={`bg-gray-700 text-white p-2 pr-8 rounded-md w-full max-w-[24rem] overflow-y-hidden relative ${
                           !isOpenAboutMe && "max-h-20"
@@ -179,7 +146,9 @@ export default function UserDetail() {
                           )}
                         </button>
                         <div
-                          dangerouslySetInnerHTML={createMarkup(user.aboutMe)}
+                          dangerouslySetInnerHTML={createMarkup(
+                            data.UserById.aboutMe
+                          )}
                         ></div>
                       </div>
                     )}
@@ -199,11 +168,11 @@ export default function UserDetail() {
                         </svg>
                         <p>
                           {formateDateToLongNotation(
-                            formatToDate(user.creationDate)
+                            formatToDate(data.UserById.creationDate)
                           )}
                         </p>
                       </li>
-                      {user.age && (
+                      {data.UserById.age && (
                         <li className="flex items-center space-x-1">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -217,10 +186,10 @@ export default function UserDetail() {
                               clipRule="evenodd"
                             />
                           </svg>
-                          <p>{user.age} years old</p>
+                          <p>{data.UserById.age} years old</p>
                         </li>
                       )}
-                      {user.location && (
+                      {data.UserById.location && (
                         <li className="flex items-center space-x-1">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -234,10 +203,10 @@ export default function UserDetail() {
                               clipRule="evenodd"
                             />
                           </svg>
-                          <p>{user.location}</p>
+                          <p>{data.UserById.location}</p>
                         </li>
                       )}
-                      {user.websiteUrl && (
+                      {data.UserById.websiteUrl && (
                         <li className="flex items-center space-x-1">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -251,7 +220,7 @@ export default function UserDetail() {
                               clipRule="evenodd"
                             />
                           </svg>
-                          <p>{user.websiteUrl}</p>
+                          <p>{data.UserById.websiteUrl}</p>
                         </li>
                       )}
                     </ul>
@@ -262,7 +231,7 @@ export default function UserDetail() {
                   <div className="">
                     <div className="grid grid-cols-2 gap-2">
                       <NumberBox
-                        value={user.upVotes}
+                        value={data.UserById.upVotes}
                         description="Up votes"
                         bgColor="bg-sky-500"
                         textColor="text-white"
@@ -270,7 +239,7 @@ export default function UserDetail() {
                         fullSquare
                       ></NumberBox>
                       <NumberBox
-                        value={user.downVotes}
+                        value={data.UserById.downVotes}
                         description="Down votes"
                         bgColor="bg-rose-500"
                         textColor="text-white"
@@ -278,7 +247,7 @@ export default function UserDetail() {
                         fullSquare
                       ></NumberBox>
                       <NumberBox
-                        value={user.views}
+                        value={data.UserById.views}
                         description="Views"
                         bgColor="bg-purple-700"
                         textColor="text-white"
@@ -286,7 +255,7 @@ export default function UserDetail() {
                         fullSquare
                       ></NumberBox>
                       <NumberBox
-                        value={user.reputation}
+                        value={data.UserById.reputation}
                         description="Reputation"
                         bgColor="bg-orange-600"
                         textColor="text-white"
@@ -299,8 +268,8 @@ export default function UserDetail() {
                 <ContentBox className="self-start">
                   <Head2>Badges</Head2>
                   <div className="w-full flex flex-wrap gap-2 content-start">
-                    {user.badges &&
-                      user.badges.map((b: BadgeType) => {
+                    {data.UserById.badges &&
+                      data.UserById.badges.map((b: BadgeType) => {
                         return <Badge name={b.name} key={b.id}></Badge>;
                       })}
                   </div>
@@ -308,8 +277,8 @@ export default function UserDetail() {
                 <ContentBox className="col-span-2">
                   <Head2>Latest Posts</Head2>
                   <div className="grid gap-2">
-                    {user.posts &&
-                      user.posts?.map((p: PostType) => {
+                    {data.UserById.posts &&
+                      data.UserById.posts?.map((p: PostType) => {
                         return (
                           <PostRow
                             key={p.id}
