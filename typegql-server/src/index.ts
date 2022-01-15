@@ -81,9 +81,9 @@ useContainer(Container);
     schema,
       plugins: [
         ApolloServerPluginCacheControl({
-          // Cache everything for 0 second by default.
-          defaultMaxAge: 5,
-          // Don't send the `cache-control` response header.
+          // Cache everything for 1 hour by default.
+          defaultMaxAge: 3600,
+          // Send the `cache-control` response header.
           calculateHttpHeaders: true,
         }),
       ],

@@ -77,6 +77,7 @@
 - Makkelijk op te zetten
 - Controleer baar in network tab
 - Stuurt niet altijd een GET req ? Soms bij reload enkel posts?
+- Werkend gekregen met persisted queries, directive toevoegen werkt. default moet hoger of 0 zijn in index.js server file
 ##### Apollo client
 - Apollo client is makkelijk op te zetten in react
 - In apollo client moet de query string direct mee gegeven worden aan gql, en niet eerst via variabele, anders werkt de cache niet

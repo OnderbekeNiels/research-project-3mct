@@ -3,7 +3,7 @@ import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGenerat
 import { Comment } from "./Comments";
 import { User } from "./Users";
 
-@Directive("@cacheControl(maxAge: 69)")
+@Directive("@cacheControl(maxAge: 50)")
 @Index("PK_Posts_Id", ["id"], { unique: true })
 @ObjectType()
 @Entity("Posts", { schema: "dbo" })
