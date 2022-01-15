@@ -4,10 +4,10 @@ import { Badge } from "./Badges";
 import { Comment } from "./Comments";
 import { Post } from "./Posts";
 
-@Directive("@cacheControl(maxAge: 30)")
+// @Directive("@cacheControl(maxAge: 5)")
 @Index("PK_Users_Id", ["id"], { unique: true })
 @ObjectType()
-@Entity("Users", { schema: "dbo" })
+@Entity("Users", { schema: "dbo" }) 
 export class User {
   @Field(() => ID)
   @PrimaryGeneratedColumn({ type: "int", name: "Id" })

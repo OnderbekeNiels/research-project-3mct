@@ -6,14 +6,14 @@
 
 - [x] Onderzoeken welke caching mogelijkheden er zijn.
 - [x] Opzetten JS backend die connect via ORM met db
-- [ ] Testen Backend caching met directives in Apollo GQL **! NOT DONE**
+- [x] Testen Backend caching met directives in Apollo GQL
 - [x] Testen Backend caching met Redis cache
 - [x] Meten resultaten backend
 - [x] Opmaken frontend applicatie in Next.js
 - [x] Frontend testen met normale fetch
-- [ ] Frontend testen met Apollo client en cache mogelijkheden
-- [ ] Frontend testen met Persisted Queries van Apollo client - backend
-- [ ] Kijken hoe http caching kan gebruikt worden met Persisted Queries (GET)
+- [x] Frontend testen met Apollo client en cache mogelijkheden
+- [x] Frontend testen met Persisted Queries van Apollo client - backend
+- [x] Kijken hoe http caching kan gebruikt worden met Persisted Queries (GET)
 - [ ] Frontend testen met relay (facebook)
 - [ ] Frontend testen met localstorage? niet noodzakelijk?
 - [ ] Meetresultaten bijhouden
@@ -45,7 +45,7 @@
 
 | Field, Type caching Apollo Server [**type gql**] | Field, Type caching Apollo Server [plain] | Redis cache |
 | -------- | -------- | -------- |
-| Not able to add right directives like apollo server plain way. | Did it like docs, no working result yet | To do
+| Same as with apollo-server-express | Found how to implement, check code 🔥 | Done
 
 
 ##### Algemeen

@@ -1,4 +1,5 @@
-import { Arg, Ctx, FieldResolver, Query, Resolver, Root } from "type-graphql";
+import { resolveGraphqlOptions } from "apollo-server-core";
+import { Arg, Ctx, FieldResolver, Info, Query, Resolver, Root } from "type-graphql";
 import { Service } from "typedi";
 import { Post } from "../entity/Posts";
 import { CommentService } from "../services/comment.service";
@@ -18,14 +19,11 @@ export class PostResolver {
   ) {}
 
   @Query(() => [Post])
-  async PostsAll(@Ctx() ctx: any) {
-    const posts = await checkCache(
-      ctx.redisClient,
-      "allposts",
-      async () => {
-        return await this.postService.all();
-      }
-    );
+  async PostsAll(@Ctx() ctx: any, @Info() info: any) {
+    // info.cacheControl.setCacheHint({ maxAge: 60 }); // works !
+    const posts = await checkCache(ctx.redisClient, "allposts", async () => {
+      return await this.postService.all();
+    })
     return posts;
   }
 
@@ -76,7 +74,10 @@ export class PostResolver {
   }
 
   @FieldResolver()
-  async votesCount(@Root() post: Post, @Ctx() ctx: any): Promise<number> {
+  async votesCount(
+    @Root() post: Post,
+    @Ctx() ctx: any,
+  ): Promise<number> {
     const votes = await checkCache(
       ctx.redisClient,
       `vote-count-from-post-${post.id}`,
