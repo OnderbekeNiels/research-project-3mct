@@ -94,6 +94,9 @@
 - Opzet baar zonder graphcdn, persisted queries maken het mogelijk met GET te werken en deze op eender welke cdn te gaan cachen.
 - GraphCDN: portforwarded server met ip werkt niet, moet gehost worden op een dn. Error afkomstig van cloudflare.
 ##### Positief
+- Snel
+- Makkelijk op te zetten
 ##### Negatief
+- Site wat buggy? Error count klopt maar geen errors getoond
 #### Bronnen
 ### DB
