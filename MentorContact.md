@@ -24,3 +24,19 @@
 * 4 Levels diep is voldoende
 * Eens kijken hoe je data fresh houd, maar volledige crud niet nodig per onderdeel
 * Gebruik maken van algemene logger (vb. firebase performance logger) om data te verzamelen  
+
+
+## Week 01 - 19/01/2022
+
+### Vragen
+
+* Moet ik een normale cdn opzetten om dit te tonen of is het aantonen dat ik http caching heb kunnen implementeren voldoende? Als ik dan vb ook kan aantonen dat de s-headers configureerbaar zijn? 
+* Ik heb nu vooral gekeken hoe ik deze cachings kan opzetten, maar nog niet hoe ik ze efficient kan gebruiken we input/output, moet ik dit voor elke gevonden manier voor enkel voor de manieren die ik zou aanraden als dev?
+
+### Need to mention
+
+* Client caching werkt 
+* Persisted Queries werkt
+* HTTP caching werkt
+
+### Feedback

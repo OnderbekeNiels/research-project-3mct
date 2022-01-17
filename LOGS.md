@@ -89,6 +89,7 @@
 ### CDN
 #### Bevindingen
 ##### Algemeen
+- Opzet baar zonder graphcdn, persisted queries maken het mogelijk met GET te werken en deze op eender welke cdn te gaan cachen.
 ##### Positief
 ##### Negatief
 #### Bronnen
