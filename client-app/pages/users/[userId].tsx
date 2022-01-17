@@ -68,12 +68,16 @@ export default function UserDetail() {
   });
 
   useEffect(() => {
-    if (data) {
-      console.log(
-        `Start: ${start} - Now: ${new Date().getTime()} = ${
-          new Date().getTime() - start
-        } ms`
-      );
+    if (data != undefined) {
+      setRequest((d) => {
+        return {
+          ...d,
+          requestName: "UserById",
+          requestNestingLevel: 4,
+          responseSize: new TextEncoder().encode(JSON.stringify(data)).length /1024,
+          responseTime: new Date().getTime() - start,
+        };
+      });
     }
   }, [data]);
 

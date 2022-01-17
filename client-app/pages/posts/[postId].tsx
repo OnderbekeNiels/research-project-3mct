@@ -64,12 +64,17 @@ export default function PostDetail() {
 
 
   useEffect(() => {
-    if (data) {
-      console.log(
-        `Start: ${start} - Now: ${new Date().getTime()} = ${
-          new Date().getTime() - start
-        } ms`
-      );
+    if (data != undefined) {
+      setRequest((d) => {
+        return {
+          ...d,
+          requestName: "PostById",
+          requestNestingLevel: 3,
+          responseSize:
+            new TextEncoder().encode(JSON.stringify(data)).length / 1024,
+          responseTime: new Date().getTime() - start,
+        };
+      });
     }
   }, [data]);
 

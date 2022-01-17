@@ -1,13 +1,15 @@
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import RequestMetrics from "../requestMetrics";
 import HeaderLink from "./headerLink";
 
 export default function Header() {
+  const [showMetrics, setShowMetrics] = useState<boolean>(false);
+
   return (
     <>
       <header className="grid place-items-center p-5 shadow-md bg-white/75 backdrop-blur-xl text-gray-900 fixed top-0 right-0 left-0 z-50 peer">
-        <div className="max-w-5xl w-full flex items-center justify-between px-4 sm:px-6">
+        <div className="max-w-5xl w-full flex items-center justify-between px-4 sm:px-6 relative">
           <Link href="/">
             <a className="flex items-center justify-center space-x-4">
               <svg
@@ -43,7 +45,7 @@ export default function Header() {
               </div>
             </a>
           </Link>
-          <ul className="flex space-x-2 items-center">
+          <ul className="flex space-x-2 items-center relative">
             <li>
               <HeaderLink href="/posts">Posts</HeaderLink>
             </li>
@@ -51,9 +53,45 @@ export default function Header() {
               <HeaderLink href="/users">Users</HeaderLink>
             </li>
           </ul>
+          <button
+            onClick={() => setShowMetrics(!showMetrics)}
+            className="p-1 rounded-b-md bg-gray-800 absolute right-6 -bottom-12 z-10"
+          >
+            {!showMetrics ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            )}
+          </button>
         </div>
       </header>
-      <RequestMetrics></RequestMetrics>
+      <RequestMetrics isVisible={showMetrics}></RequestMetrics>
     </>
   );
 }

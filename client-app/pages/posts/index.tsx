@@ -72,11 +72,16 @@ PostsAll {
 
   useEffect(() => {
     if (data != undefined) {
-      console.log(
-        `Start: ${start} - Now: ${new Date().getTime()} = ${
-          new Date().getTime() - start
-        } ms`
-      );
+      setRequest((d) => {
+        return {
+          ...d,
+          requestName: "PostsAll",
+          requestNestingLevel: 2,
+          responseSize:
+            new TextEncoder().encode(JSON.stringify(data)).length / 1024,
+          responseTime: new Date().getTime() - start,
+        };
+      });
     }
   }, [data]);
 
@@ -86,7 +91,7 @@ PostsAll {
         <Container>
           <Head1>Latest posts ({data ? data.PostsAll.length : 0})</Head1>
           {/* <Head1>Latest posts ({posts ? posts.length : 0})</Head1> */}
-          <div className="grid sm:gap-6 mt-6">
+          <div className="grid gap-4 sm:gap-6 mt-6">
             {/* ! Apollo Client way */}
             {error && <ErrorMessageBox />}
             {loading && <LoadingMessageBox />}

@@ -1,6 +1,6 @@
-export function Head1({ children }: any) {
+export function Head1({ children, className }: any) {
   return (
-    <h1 className="text-xl md:text-2xl font-bold text-gray-800 mb-4">
+    <h1 className={`text-xl md:text-2xl font-bold text-gray-800 mb-4 ${className}`}>
       {children}
     </h1>
   );

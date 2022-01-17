@@ -32,11 +32,14 @@ export default function Users() {
   
   useEffect(() => {
     if (data) {
-      console.log(
-        `Start: ${start} - Now: ${new Date().getTime()} = ${
-          new Date().getTime() - start
-        } ms`
-      );
+      setRequest((d) => {return {
+        ...d,
+        requestName: "UsersAll",
+        requestNestingLevel: 1,
+        responseSize:
+          new TextEncoder().encode(JSON.stringify(data)).length / 1024,
+        responseTime: new Date().getTime() - start,
+      };})
     }
   }, [data]);
   
@@ -48,7 +51,7 @@ export default function Users() {
           <Head1>Users ({data ? data.UsersAll.length : 0})</Head1>
           {error && <ErrorMessageBox />}
           {loading && <LoadingMessageBox />}
-          <div className="grid grid-cols-1 lg:grid-cols-2 sm:gap-6 mt-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mt-6">
             {data && data.UsersAll.length < 0 && (
               <ContentBox>No users found to display</ContentBox>
             )}
