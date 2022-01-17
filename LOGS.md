@@ -14,10 +14,12 @@
 - [x] Frontend testen met Apollo client en cache mogelijkheden
 - [x] Frontend testen met Persisted Queries van Apollo client - backend
 - [x] Kijken hoe http caching kan gebruikt worden met Persisted Queries (GET)
-- [ ] Frontend testen met relay (facebook)
+- [ ] Frontend testen met relay (facebook) ?
 - [ ] Frontend testen met localstorage? niet noodzakelijk?
 - [ ] Meetresultaten bijhouden
 - [ ] GraphCDN testen
+- [ ] Mutations toevoegen aan app en kijken wat het efficiëntste is om het complete plaatje te hebben
+- [ ] Vergelijking opmaken van de verschillende strategiën
 
 ### Metrics
 * Response time in backend
