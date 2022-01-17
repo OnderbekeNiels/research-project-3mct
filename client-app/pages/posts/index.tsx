@@ -15,8 +15,10 @@ import LoadingMessageBox from "../../components/loadingMessageBox";
 import { useRecoilState } from "recoil";
 import { requestState } from "../../utils/store";
 import { gql, useQuery } from "@apollo/client";
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
+  const router = useRouter();
   // ! State
   const [request, setRequest] = useRecoilState(requestState);
 
@@ -89,7 +91,24 @@ PostsAll {
     <>
       <Row>
         <Container>
+          <div className="flex items-center justify-between">
           <Head1>Latest posts ({data ? data.PostsAll.length : 0})</Head1>
+          <button onClick={()=> {router.push('/posts/create')}} className="flex space-x-2 rounded-md items-center justify-between p-2 bg-purple-600 border-2 border-purple-600 text-white hover:bg-purple-600/0 hover:text-purple-600 transition-all duration-300 mb-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <p>Create a post</p>
+          </button>
+          </div>
           {/* <Head1>Latest posts ({posts ? posts.length : 0})</Head1> */}
           <div className="grid gap-4 sm:gap-6 mt-6">
             {/* ! Apollo Client way */}
