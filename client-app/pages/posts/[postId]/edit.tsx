@@ -1,4 +1,4 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { isElectron } from "@firebase/util";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -34,18 +34,49 @@ export default function () {
     fetchPolicy: "no-cache",
   });
 
+  const UPDATEPOST = gql`
+    mutation UpdatePost($data: PostUpdate!, $postId: Float!) {
+      UpdatePost(data: $data, postId: $postId){
+        id
+        title
+        body
+      }
+    }
+  `;
+
+  const [updatePost, networkStatus] = useMutation(UPDATEPOST);
+
   useEffect(() => {
     if (data != undefined) {
       setPost(data.PostById);
     }
   }, [data]);
 
+  useEffect(() => {
+    console.log({ networkStatus });
+  }, [networkStatus]);
+
   return (
     <Row>
       <Container>
         <Head1>Edit post {postId}</Head1>
         <ContentBox>
-          <form action="" className="grid gap-6">
+          <form
+            action=""
+            className="grid gap-6"
+            onSubmit={(e) => {
+              e.preventDefault();
+              updatePost({
+                variables: {
+                  postId: postId && +postId,
+                  data: {
+                    body: post.body,
+                    title: post.title,
+                  },
+                },
+              });
+            }}
+          >
             <div className="grid gap-2">
               <label htmlFor="title">Title</label>
               <input

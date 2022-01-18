@@ -86,6 +86,7 @@
 - Goed dev tool in chrome beschikbaar
 - Wanneer de cache gebruikt word zie je je data kwasie direct zonder zelf de loader te zien.
 - Bij de hooks om data te fetchen heb je direct een error, loading & data destructuring die het heel developper friendly maken.
+- Bij een mutation moet het return __typename & id aanwegzig zijn om de client cache te updaten
 ##### Negatief
 #### Bronnen
 ### CDN

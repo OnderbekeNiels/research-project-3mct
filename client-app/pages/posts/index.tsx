@@ -65,7 +65,7 @@ PostsAll {
     }
   `;
   const { loading, error, data } = useQuery(GETALLPOSTS, {
-    fetchPolicy: "no-cache",
+    
   });
 
   // ! Lifecycle

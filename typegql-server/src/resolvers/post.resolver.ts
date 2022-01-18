@@ -1,5 +1,14 @@
 import { resolveGraphqlOptions } from "apollo-server-core";
-import { Arg, Ctx, FieldResolver, Info, Mutation, Query, Resolver, Root } from "type-graphql";
+import {
+  Arg,
+  Ctx,
+  FieldResolver,
+  Info,
+  Mutation,
+  Query,
+  Resolver,
+  Root,
+} from "type-graphql";
 import { Service } from "typedi";
 import { Post } from "../entity/Posts";
 import { CommentService } from "../services/comment.service";
@@ -8,6 +17,7 @@ import { UserService } from "../services/user.service";
 import { VoteService } from "../services/votes.service";
 import { checkCache } from "../utils/redis";
 import { PostInput } from "./DTO/post.create.dto";
+import { PostUpdate } from "./DTO/post.update.dto";
 
 @Service()
 @Resolver(() => Post)
@@ -89,11 +99,16 @@ export class PostResolver {
   }
 
   @Mutation(() => Post)
-  async CreatePost(
-    @Arg("data") newPost: PostInput,
-  ): Promise<Post> {
+  async CreatePost(@Arg("data") newPost: PostInput): Promise<Post> {
     const post: Post = await this.postService.create(newPost);
-    console.log({post})
     return post;
+  }
+
+  @Mutation(() => Post)
+  async UpdatePost(
+    @Arg("postId") postId: number,
+    @Arg("data") postUpdate: PostUpdate
+  ): Promise<Post> {
+    return await this.postService.update(postId, postUpdate) as Post;
   }
 }
