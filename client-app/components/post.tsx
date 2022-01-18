@@ -1,5 +1,6 @@
+import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UserType, { Anonymous } from "../models/user";
 import createMarkup from "../utils/core";
 import formatTags from "../utils/string";
@@ -33,13 +34,36 @@ export default function Post({
     formatTags(post.tags)
   );
 
+  const DELETEPOSTBYID = gql`
+    mutation DeletePost($postId: Float!) {
+      DeletePost(postId: $postId) {
+        id
+      }
+    }
+  `;
+
+  const [deletePost, { called, data }] = useMutation(DELETEPOSTBYID);
+
   const handleDelete = (e: any) => {
     e.stopPropagation();
     const answer: boolean = confirm(
       `Are you sure you want to delete post with title "${post.title}"`
     );
-    // ! call delete mutation
+    deletePost({
+      variables: { postId: +post.id },
+      update(cache) {
+        const normalizedId = cache.identify({
+          id: post.id,
+          __typename: "Post",
+        });
+        cache.evict({ id: normalizedId });
+      },
+    });
   };
+
+  useEffect(() => {
+    if (data) router.back();
+  }, [data]);
 
   return (
     <ContentBox

@@ -5,6 +5,7 @@ import ContentBox from "../../components/contentBox";
 import Container from "../../components/objects/container";
 import { Head1 } from "../../components/objects/head";
 import Row from "../../components/objects/row";
+import StatusBar from "../../components/statusBar";
 
 export default function CreatePost() {
   interface CreatePost {
@@ -12,51 +13,63 @@ export default function CreatePost() {
     body: string;
   }
   const router = useRouter();
-  const [post, setPost] = useState<CreatePost>({ title: "I tried this mutation....", body: "Hope it works" });
+  const [post, setPost] = useState<CreatePost>({
+    title: "I tried this mutation....",
+    body: "Hope it works",
+  });
 
-  const CREATEPOST = gql`mutation CreatePost($data: PostInput!) {
-  CreatePost(data: $data) {
-     id
-    answerCount
-    communityOwnedDate
-    lastEditDate
-    body
-      ownerUser {
+  const CREATEPOST = gql`
+    mutation CreatePost($data: PostInput!) {
+      CreatePost(data: $data) {
         id
-        displayName
-        upVotes
-        downVotes
-        reputation
-    }
-    tags
-    title
-    viewCount
-    comments {
-      id
-      text
-      creationDate
-      user {
-        id
-        displayName
+        answerCount
+        communityOwnedDate
+        lastEditDate
+        body
+        ownerUser {
+          id
+          displayName
+          upVotes
+          downVotes
+          reputation
+        }
+        tags
+        title
+        viewCount
+        comments {
+          id
+          text
+          creationDate
+          user {
+            id
+            displayName
+          }
+          creationDate
+        }
       }
-      creationDate
     }
-  }
-  }`;
+  `;
 
-  const  [addPost, {data}] = useMutation(CREATEPOST);
+  const [addPost, { data, error, loading }] = useMutation(CREATEPOST);
 
   useEffect(() => {
-    if(data != undefined){
-      console.log({data})
-      router.push(`/posts/${data.CreatePost.id}`)
+    if (data != undefined) {
+      console.log({ data });
+      router.push(`/posts/${data.CreatePost.id}`);
     }
-  }, [data])
+  }, [data]);
 
   return (
     <Row>
       <Container>
         <Head1>Create a post</Head1>
+        {error && (
+          <StatusBar
+            level="error"
+            message="Something went wrong while creating."
+          />
+        )}
+        {data && <StatusBar level="ok" message="Created succesfully" />}
         <ContentBox>
           <form
             action=""
@@ -89,7 +102,6 @@ export default function CreatePost() {
                 id="title"
                 className="border-2 outline-none border-gray-300 active:border-orange-600 focus:border-orange-600 focus:ring-2 ring-orange-600/50 rounded-md p-1 max-w-xl"
                 placeholder="I have this problem where..."
-                defaultValue={""}
                 value={post && post.title}
                 onChange={(e: any) => {
                   setPost((p: CreatePost) => {
@@ -105,7 +117,6 @@ export default function CreatePost() {
                 id="description"
                 className="border-2 outline-none border-gray-300 active:border-orange-600 focus:border-orange-600 focus:ring-2 ring-orange-600/50 rounded-md p-1 max-w-xl"
                 placeholder="When i run this code..."
-                defaultValue={""}
                 value={post && post.body}
                 onChange={(e: any) => {
                   setPost((p: CreatePost) => {

@@ -16,6 +16,7 @@ import { PostService } from "../services/posts.service";
 import { UserService } from "../services/user.service";
 import { VoteService } from "../services/votes.service";
 import { checkCache } from "../utils/redis";
+import { Id } from "./DTO/id.response.dto";
 import { PostInput } from "./DTO/post.create.dto";
 import { PostUpdate } from "./DTO/post.update.dto";
 
@@ -109,6 +110,13 @@ export class PostResolver {
     @Arg("postId") postId: number,
     @Arg("data") postUpdate: PostUpdate
   ): Promise<Post> {
-    return await this.postService.update(postId, postUpdate) as Post;
+    return (await this.postService.update(postId, postUpdate)) as Post;
+  }
+
+  @Mutation(() => Id)
+  async DeletePost(
+    @Arg("postId") postId: number,
+  ): Promise<Id> {
+    return await this.postService.delete(postId);
   }
 }

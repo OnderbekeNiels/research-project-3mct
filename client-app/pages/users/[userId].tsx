@@ -1,4 +1,4 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import { trace } from "firebase/performance";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -62,24 +62,30 @@ export default function UserDetail() {
       }
     }
   `;
-  const { loading, error, data } = useQuery(GETUSERBYID, {
-    variables: { userId: userId ? +userId : undefined },
-    fetchPolicy: "no-cache",
-  });
+  const [getUserById, { loading, error, data }] = useLazyQuery(GETUSERBYID, {fetchPolicy: "cache-and-network"});
 
   useEffect(() => {
+    console.log({data})
     if (data != undefined) {
       setRequest((d) => {
         return {
           ...d,
           requestName: "UserById",
           requestNestingLevel: 4,
-          responseSize: new TextEncoder().encode(JSON.stringify(data)).length /1024,
+          responseSize:
+            new TextEncoder().encode(JSON.stringify(data)).length / 1024,
           responseTime: new Date().getTime() - start,
         };
       });
     }
   }, [data]);
+
+  useEffect(() => {
+    if (userId)
+      getUserById({
+        variables: { userId: userId ? +userId : undefined },
+      });
+  }, [userId]);
 
   return (
     <>

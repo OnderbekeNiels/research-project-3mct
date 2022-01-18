@@ -1,4 +1,4 @@
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { isElectron } from "@firebase/util";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -6,6 +6,7 @@ import ContentBox from "../../../components/contentBox";
 import Container from "../../../components/objects/container";
 import { Head1 } from "../../../components/objects/head";
 import Row from "../../../components/objects/row";
+import StatusBar from "../../../components/statusBar";
 
 export default function () {
   const router = useRouter();
@@ -29,14 +30,14 @@ export default function () {
       }
     }
   `;
-  const { loading, error, data } = useQuery(GETPOSTBYID, {
-    variables: { postId: postId ? +postId : undefined },
+
+  const [getPostById, { loading, error, data }] = useLazyQuery(GETPOSTBYID, {
     fetchPolicy: "no-cache",
   });
 
   const UPDATEPOST = gql`
     mutation UpdatePost($data: PostUpdate!, $postId: Float!) {
-      UpdatePost(data: $data, postId: $postId){
+      UpdatePost(data: $data, postId: $postId) {
         id
         title
         body
@@ -44,7 +45,7 @@ export default function () {
     }
   `;
 
-  const [updatePost, networkStatus] = useMutation(UPDATEPOST);
+  const [updatePost, response] = useMutation(UPDATEPOST);
 
   useEffect(() => {
     if (data != undefined) {
@@ -53,13 +54,25 @@ export default function () {
   }, [data]);
 
   useEffect(() => {
-    console.log({ networkStatus });
-  }, [networkStatus]);
+    if (postId)
+      getPostById({
+        variables: { postId: +postId },
+      });
+  }, [postId]);
 
   return (
     <Row>
       <Container>
         <Head1>Edit post {postId}</Head1>
+        {response.error && (
+          <StatusBar
+            level="error"
+            message="Something went wrong while updating."
+          />
+        )}
+        {response.data && (
+          <StatusBar level="ok" message="Updated succesfully." />
+        )}
         <ContentBox>
           <form
             action=""
@@ -85,7 +98,6 @@ export default function () {
                 id="title"
                 className="border-2 outline-none border-gray-300 active:border-orange-600 focus:border-orange-600 focus:ring-2 ring-orange-600/50 rounded-md p-1 max-w-xl"
                 placeholder="I have this problem where..."
-                defaultValue={""}
                 value={post && post.title}
                 onChange={(e: any) => {
                   setIsEdited(true);
@@ -102,7 +114,6 @@ export default function () {
                 id="description"
                 className="border-2 outline-none border-gray-300 active:border-orange-600 focus:border-orange-600 focus:ring-2 ring-orange-600/50 rounded-md p-1 max-w-xl"
                 placeholder="When i run this code..."
-                defaultValue={""}
                 value={post && post.body}
                 onChange={(e: any) => {
                   setIsEdited(true);

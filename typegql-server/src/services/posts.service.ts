@@ -4,6 +4,8 @@ import { InjectRepository } from "typeorm-typedi-extensions";
 import { Post } from "../entity/Posts";
 import { PostInput } from "../resolvers/DTO/post.create.dto";
 import { PostUpdate } from "../resolvers/DTO/post.update.dto";
+import { CommentRepository } from "./comment.service";
+import { VoteRepository } from "./votes.service";
 
 @EntityRepository(Post)
 export class PostRepository extends Repository<Post> {}
@@ -12,6 +14,10 @@ export class PostRepository extends Repository<Post> {}
 export class PostService {
   @InjectRepository(PostRepository)
   private readonly postRepository: PostRepository;
+  @InjectRepository(VoteRepository)
+  private readonly votesRepository: VoteRepository;
+  @InjectRepository(CommentRepository)
+  private readonly commentRepository: CommentRepository;
 
   async all() {
     return await this.postRepository.find({
@@ -34,12 +40,22 @@ export class PostService {
   }
 
   async update(postId: number, postInput: PostUpdate) {
-    if(this.postRepository.findOne(postId)){
+    if (this.postRepository.findOne(postId)) {
       this.postRepository.update(postId, postInput);
-      return {id: postId, ...postInput}
+      return { id: postId, ...postInput };
+    } else {
+      throw "post does not exists";
     }
-    else{
-      throw "post does not exists"
+  }
+
+  async delete(postId: number) {
+    if (this.postRepository.findOne(postId)) {
+      await this.commentRepository.delete({ postId: postId });
+      await this.votesRepository.delete({ postId: postId });
+      await this.postRepository.delete(postId);
+      return { id: postId };
+    } else {
+      throw "post does not exists";
     }
   }
 }
