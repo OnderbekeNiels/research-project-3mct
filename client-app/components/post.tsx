@@ -40,7 +40,7 @@ export default function Post({
     );
     // ! call delete mutation
   };
-⚙️⚙️
+
   return (
     <ContentBox
       onClick={() => {
