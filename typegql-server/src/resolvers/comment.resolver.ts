@@ -6,7 +6,6 @@ import { PostService } from "../services/posts.service";
 import { UserService } from "../services/user.service";
 import { checkCache } from "../utils/redis";
 
-
 @Service()
 @Resolver(() => Comment)
 export class CommentResolver {
@@ -35,7 +34,7 @@ export class CommentResolver {
   async user(@Root() comment: Comment, @Ctx() ctx: any) {
     const user = await checkCache(
       ctx.redisClient,
-      `user-${comment.userId}`,
+      `user:${comment.userId}`,
       async () => {
         return await this.userService.findByArgs(comment.userId);
       }

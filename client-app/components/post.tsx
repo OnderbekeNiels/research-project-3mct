@@ -63,9 +63,9 @@ export default function Post({
     });
   };
 
-  useEffect(() => {
-    if (data) router.back();
-  }, [data]);
+  // useEffect(() => {
+  //   if (data) router.back();
+  // }, [data]);
 
   return (
     <ContentBox

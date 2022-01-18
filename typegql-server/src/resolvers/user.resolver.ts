@@ -36,7 +36,7 @@ export class UserResolver {
   async UserById(@Arg("userId") userId: number, @Ctx() ctx: any) {
     const user = await checkCache(
       ctx.redisClient,
-      `user-${userId}`,
+      `user:${userId}`,
 
       async () => {
         return await this.userService.findById(userId);
@@ -49,7 +49,7 @@ export class UserResolver {
   async badges(@Root() user: User, @Ctx() ctx: any) {
     const badges = await checkCache(
       ctx.redisClient,
-      `badges-from-user-${user.id}`,
+      `badges:user:${user.id}`,
 
       async () => {
         return await this.badgeService.findAllByArgs({
@@ -73,7 +73,7 @@ export class UserResolver {
   async comments(@Root() user: User, @Ctx() ctx: any) {
     const comments = await checkCache(
       ctx.redisClient,
-      `comments-from-user-${user.id}`,
+      `comments:user:${user.id}`,
       async () => {
         return await this.commentService.findAllByArgs({
           userId: user.id,
@@ -91,12 +91,12 @@ export class UserResolver {
   //     take: 10,
   //   });
   // }
-
+// ! to fix delete and update problems, this is wrong, you would need to split the array in to lots of diffrent enityies
   @FieldResolver()
   async posts(@Root() user: User, @Ctx() ctx: any) {
     const posts = await checkCache(
       ctx.redisClient,
-      `posts-from-user-${user.id}`,
+      `posts:user:${user.id}`,
 
       async () => {
         return await this.postService.findAllByArgs({
