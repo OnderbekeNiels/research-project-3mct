@@ -36,6 +36,7 @@ export class Post {
   @Column("datetime", { name: "CommunityOwnedDate", nullable: true })
   communityOwnedDate: string | null;
 
+  @Field()
   @Column("datetime", { name: "CreationDate" })
   creationDate: string;
 

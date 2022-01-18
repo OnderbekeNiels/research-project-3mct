@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { gql, useMutation } from "@apollo/client";
+import Router, { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import ContentBox from "../../components/contentBox";
 import Container from "../../components/objects/container";
 import { Head1 } from "../../components/objects/head";
@@ -9,14 +11,76 @@ export default function CreatePost() {
     title: string;
     body: string;
   }
-  const [post, setPost] = useState<CreatePost>({ title: "", body: "" });
+  const router = useRouter();
+  const [post, setPost] = useState<CreatePost>({ title: "I tried this mutation....", body: "Hope it works" });
+
+  const CREATEPOST = gql`mutation CreatePost($data: PostInput!) {
+  CreatePost(data: $data) {
+     id
+    answerCount
+    communityOwnedDate
+    lastEditDate
+    body
+      ownerUser {
+        id
+        displayName
+        upVotes
+        downVotes
+        reputation
+    }
+    tags
+    title
+    viewCount
+    comments {
+      id
+      text
+      creationDate
+      user {
+        id
+        displayName
+      }
+      creationDate
+    }
+  }
+  }`;
+
+  const  [addPost, {data}] = useMutation(CREATEPOST);
+
+  useEffect(() => {
+    if(data != undefined){
+      console.log({data})
+      router.push(`/posts/${data.CreatePost.id}`)
+    }
+  }, [data])
 
   return (
     <Row>
       <Container>
         <Head1>Create a post</Head1>
         <ContentBox>
-          <form action="" className="grid gap-6">
+          <form
+            action=""
+            className="grid gap-6"
+            onSubmit={(e) => {
+              e.preventDefault();
+              addPost({
+                variables: {
+                  data: {
+                    body: post.body,
+                    creationDate: new Date().toISOString(),
+                    lastActivityDate: new Date().toISOString(),
+                    lastEditDate: new Date().toISOString(),
+                    ownerUserId: 1,
+                    postTypeId: 1,
+                    score: 2,
+                    title: post.title,
+                    viewCount: 0,
+                    votesCount: 0,
+                  },
+                },
+              });
+            }}
+          >
             <div className="grid gap-2">
               <label htmlFor="title">Title</label>
               <input

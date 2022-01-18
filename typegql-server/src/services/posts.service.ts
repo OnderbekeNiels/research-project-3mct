@@ -2,6 +2,7 @@ import { Service } from "typedi";
 import { EntityRepository, Repository } from "typeorm";
 import { InjectRepository } from "typeorm-typedi-extensions";
 import { Post } from "../entity/Posts";
+import { PostInput } from "../resolvers/DTO/post.create.dto";
 
 @EntityRepository(Post)
 export class PostRepository extends Repository<Post> {}
@@ -25,5 +26,9 @@ export class PostService {
 
   async findAllByArgs(args: {}) {
     return await this.postRepository.find(args);
+  }
+
+  async create(postInput: PostInput){
+    return this.postRepository.save(postInput)
   }
 }
