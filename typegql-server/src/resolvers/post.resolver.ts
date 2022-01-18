@@ -32,7 +32,7 @@ export class PostResolver {
 
   @Query(() => [Post])
   async PostsAll(@Ctx() ctx: any, @Info() info: any) {
-    info.cacheControl.setCacheHint({ maxAge: 60 }); // works !
+    info.cacheControl.setCacheHint({ maxAge: 10 }); // works !
     const posts = await checkCache(ctx.redisClient, "allposts", async () => {
       return await this.postService.all();
     });

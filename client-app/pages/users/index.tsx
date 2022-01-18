@@ -32,6 +32,7 @@ export default function Users() {
   
   useEffect(() => {
     if (data) {
+      console.log({data})
       setRequest((d) => {return {
         ...d,
         requestName: "UsersAll",

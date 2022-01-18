@@ -42,7 +42,7 @@ useContainer(Container);
           // Cache everything for 1 hour by default.
           defaultMaxAge: 3600,
           // Send the `cache-control` response header.
-          calculateHttpHeaders: true,
+          calculateHttpHeaders: false,
         }),
       ],
     context: ({ req, res }) => ({
@@ -60,6 +60,7 @@ useContainer(Container);
   app.use(cors());
 
   app.use("/graphql*", (req, res, next) => {
+
     const startHrTime = process.hrtime();
 
     res.on("finish", () => {
