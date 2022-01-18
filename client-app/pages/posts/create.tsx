@@ -50,7 +50,9 @@ export default function CreatePost() {
     }
   `;
 
-  const [addPost, { data, error, loading }] = useMutation(CREATEPOST);
+  const [addPost, { data, error, loading }] = useMutation(CREATEPOST, {
+    fetchPolicy: "no-cache",
+  });
 
   useEffect(() => {
     if (data != undefined) {

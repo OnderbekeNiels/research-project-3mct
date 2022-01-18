@@ -1,4 +1,4 @@
-import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
+import { gql, useLazyQuery, useMutation } from "@apollo/client";
 import { isElectron } from "@firebase/util";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -45,7 +45,9 @@ export default function () {
     }
   `;
 
-  const [updatePost, response] = useMutation(UPDATEPOST);
+  const [updatePost, response] = useMutation(UPDATEPOST, {
+    fetchPolicy: "no-cache"
+  });
 
   useEffect(() => {
     if (data != undefined) {

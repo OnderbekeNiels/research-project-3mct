@@ -1,4 +1,4 @@
-import { gql, useLazyQuery, useQuery } from "@apollo/client";
+import { gql, useLazyQuery } from "@apollo/client";
 import { trace } from "firebase/performance";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -62,7 +62,7 @@ export default function UserDetail() {
       }
     }
   `;
-  const [getUserById, { loading, error, data }] = useLazyQuery(GETUSERBYID, {fetchPolicy: "cache-and-network"});
+  const [getUserById, { loading, error, data }] = useLazyQuery(GETUSERBYID, {fetchPolicy: "no-cache"});
 
   useEffect(() => {
     console.log({data})
