@@ -45,7 +45,9 @@ export default function () {
     }
   `;
 
-  const [updatePost, response] = useMutation(UPDATEPOST);
+  const [updatePost, response] = useMutation(UPDATEPOST, {
+    fetchPolicy: "no-cache",
+  });
 
   useEffect(() => {
     if (data != undefined) {

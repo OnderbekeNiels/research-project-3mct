@@ -42,7 +42,7 @@ export default function Post({
     }
   `;
 
-  const [deletePost, { called, data }] = useMutation(DELETEPOSTBYID);
+  const [deletePost, { called, data }] = useMutation(DELETEPOSTBYID, {fetchPolicy: "no-cache"});
 
   const handleDelete = (e: any) => {
     e.stopPropagation();
@@ -51,19 +51,12 @@ export default function Post({
     );
     deletePost({
       variables: { postId: +post.id },
-      update(cache) {
-        const normalizedId = cache.identify({
-          id: post.id,
-          __typename: "Post",
-        });
-        cache.evict({ id: normalizedId });
-      },
     });
   };
 
-  useEffect(() => {
-    if (data) router.back();
-  }, [data]);
+  // useEffect(() => {
+  //   if (data) router.back();
+  // }, [data]);
 
   return (
     <ContentBox
