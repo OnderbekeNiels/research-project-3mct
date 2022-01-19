@@ -1,4 +1,3 @@
-import { resolveGraphqlOptions } from "apollo-server-core";
 import {
   Arg,
   Ctx,
@@ -19,6 +18,7 @@ import { checkCache } from "../utils/redis";
 import { Id } from "./DTO/id.response.dto";
 import { PostInput } from "./DTO/post.create.dto";
 import { PostUpdate } from "./DTO/post.update.dto";
+import fetch from "cross-fetch";
 
 @Service()
 @Resolver(() => Post)
@@ -102,6 +102,15 @@ export class PostResolver {
   @Mutation(() => Post)
   async CreatePost(@Arg("data") newPost: PostInput): Promise<Post> {
     const post: Post = await this.postService.create(newPost);
+    // ! purge al caches with type post so there are no stale caches.
+    await fetch("https://admin.graphcdn.io/stackof-rp", {
+      method: "POST", // Always POST purge mutations
+      headers: {
+        "Content-Type": "application/json", // and specify the Content-Type
+        "graphcdn-token": "dashboard-28079ab7",
+      },
+      body: JSON.stringify({ query: `mutation { purgeUser }` }),
+    }).catch((e) => console.error(e));
     return post;
   }
 
@@ -114,9 +123,7 @@ export class PostResolver {
   }
 
   @Mutation(() => Id)
-  async DeletePost(
-    @Arg("postId") postId: number,
-  ): Promise<Id> {
+  async DeletePost(@Arg("postId") postId: number): Promise<Id> {
     return await this.postService.delete(postId);
   }
 }

@@ -22,35 +22,14 @@ export default function CreatePost() {
     mutation CreatePost($data: PostInput!) {
       CreatePost(data: $data) {
         id
-        answerCount
-        communityOwnedDate
-        lastEditDate
-        body
-        ownerUser {
-          id
-          displayName
-          upVotes
-          downVotes
-          reputation
-        }
-        tags
-        title
-        viewCount
-        comments {
-          id
-          text
-          creationDate
-          user {
-            id
-            displayName
-          }
-          creationDate
-        }
       }
     }
   `;
 
-  const [addPost, { data, error, loading }] = useMutation(CREATEPOST);
+  const [addPost, { data, error, loading }] = useMutation(CREATEPOST, {
+    fetchPolicy: "no-cache",
+  });
+
 
   useEffect(() => {
     if (data != undefined) {

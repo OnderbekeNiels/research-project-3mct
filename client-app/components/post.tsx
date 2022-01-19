@@ -42,7 +42,9 @@ export default function Post({
     }
   `;
 
-  const [deletePost, { called, data }] = useMutation(DELETEPOSTBYID);
+  const [deletePost, { called, data }] = useMutation(DELETEPOSTBYID, {
+    fetchPolicy: "no-cache",
+  });
 
   const handleDelete = (e: any) => {
     e.stopPropagation();

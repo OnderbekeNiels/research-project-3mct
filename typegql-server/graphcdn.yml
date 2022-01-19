@@ -1,0 +1,19 @@
+# GraphCDN configuration. Learn more at https://docs.graphcdn.io/docs/cli
+passThroughOnly: false
+rootTypeNames:
+  query: Query
+rules:
+  - types:
+      Query:
+        - PostsAll
+    maxAge: 120
+    swr: 120
+    description: Cache Posts, swr after short time
+  - types:
+      Query:
+        - UserById
+    maxAge: 120
+    swr: 120
+    description: Cache UserById
+name: stackof-rp
+originUrl: http://87b2-2a02-1811-9d32-ba00-c1f8-5d6-d667-3a22.ngrok.io/graphql
