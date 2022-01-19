@@ -43,12 +43,16 @@ export class UserResolver {
     const user = await checkCache(
       ctx.redisClient,
       `user-${userId}`,
-
       async () => {
         return await this.userService.findById(userId);
       }
-    );
-    return user;
+      );
+      //! works against cache busting
+      ctx.res.set(
+        "cache-control",
+        "stale-while-revalidate=40, public"
+      );
+      return user;
   }
 
   @FieldResolver()
