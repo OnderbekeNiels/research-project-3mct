@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useMutation } from "urql";
 import UserType, { Anonymous } from "../models/user";
 import createMarkup from "../utils/core";
