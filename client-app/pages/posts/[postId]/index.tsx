@@ -1,9 +1,8 @@
-import { gql, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
+import { useQuery } from "urql";
 import Comment from "../../../components/comment";
-import ContentBox from "../../../components/contentBox";
 import ErrorMessageBox from "../../../components/errorMessageBox";
 import LoadingMessageBox from "../../../components/loadingMessageBox";
 import Container from "../../../components/objects/container";
@@ -11,13 +10,9 @@ import { Head1, Head2 } from "../../../components/objects/head";
 import Row from "../../../components/objects/row";
 import Post, { PostArgs } from "../../../components/post";
 import CommentType from "../../../models/comment";
-import PostType from "../../../models/post";
 import { Anonymous } from "../../../models/user";
-import createMarkup from "../../../utils/core";
 import { formateDateToLongNotation, formatToDate } from "../../../utils/date";
-import { query } from "../../../utils/fetch";
 import { requestState } from "../../../utils/store";
-import formatTags from "../../../utils/string";
 
 export default function PostDetail() {
   const router = useRouter();
@@ -27,7 +22,7 @@ export default function PostDetail() {
 
   const [start, setStart] = useState(new Date().getTime());
 
-  const GETPOSTBYID = gql`query PostById($postId: Float!) {
+  const GETPOSTBYID = `query PostById($postId: Float!) {
   PostById(postId: $postId) {
         id
     answerCount
@@ -56,12 +51,12 @@ export default function PostDetail() {
     }
   }
 }`;
-  const { loading, error, data } = useQuery(GETPOSTBYID, {
-    variables: { postId: postId  ? +postId : undefined}, 
-    fetchPolicy: "no-cache",
-  
-  });
-
+   const [result, reexecuteQuery] = useQuery({
+     query: GETPOSTBYID,
+     variables: { postId: +postId! },
+     pause: !postId
+   });
+  const { data, fetching, error } = result;
 
   useEffect(() => {
     if (data != undefined) {
@@ -84,7 +79,7 @@ export default function PostDetail() {
       <Row>
         <Container>
           {error && <ErrorMessageBox />}
-          {loading && <LoadingMessageBox />}
+          {fetching && <LoadingMessageBox />}
           {data && (
             <>
               <Head1>

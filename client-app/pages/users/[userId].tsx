@@ -1,8 +1,8 @@
-import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import { trace } from "firebase/performance";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
+import { useQuery } from "urql";
 import Badge from "../../components/badge";
 import ContentBox from "../../components/contentBox";
 import ErrorMessageBox from "../../components/errorMessageBox";
@@ -26,7 +26,7 @@ export default function UserDetail() {
   const [request, setRequest] = useRecoilState(requestState);
   const [start, setStart] = useState(new Date().getTime());
 
-  const GETUSERBYID = gql`
+  const GETUSERBYID = `
     query UserById($userId: Float!) {
       UserById(userId: $userId) {
         id
@@ -62,7 +62,12 @@ export default function UserDetail() {
       }
     }
   `;
-  const [getUserById, { loading, error, data }] = useLazyQuery(GETUSERBYID, {fetchPolicy: "cache-and-network"});
+     const [result, reexecuteQuery] = useQuery({
+       query: GETUSERBYID,
+       variables: { userId: +userId! },
+       pause: !userId,
+     });
+     const { data, fetching, error } = result;
 
   useEffect(() => {
     console.log({data})
@@ -80,19 +85,12 @@ export default function UserDetail() {
     }
   }, [data]);
 
-  useEffect(() => {
-    if (userId)
-      getUserById({
-        variables: { userId: userId ? +userId : undefined },
-      });
-  }, [userId]);
-
   return (
     <>
       <Row>
         <Container>
           {error && <ErrorMessageBox />}
-          {loading && <LoadingMessageBox />}
+          {fetching && <LoadingMessageBox />}
           <div className="grid grid-cols-3 gap-6 pt-10">
             {data && (
               <>

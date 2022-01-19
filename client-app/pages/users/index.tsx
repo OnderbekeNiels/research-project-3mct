@@ -1,6 +1,6 @@
-import { gql, useQuery } from "@apollo/client";
-import React, { Profiler, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
+import { useQuery } from "urql";
 import ContentBox from "../../components/contentBox";
 import ErrorMessageBox from "../../components/errorMessageBox";
 import LoadingMessageBox from "../../components/loadingMessageBox";
@@ -9,7 +9,6 @@ import { Head1 } from "../../components/objects/head";
 import Row from "../../components/objects/row";
 import User from "../../components/user";
 import UserType from "../../models/user";
-import { query } from "../../utils/fetch";
 import { requestState } from "../../utils/store";
 
 export default function Users() {
@@ -17,7 +16,7 @@ export default function Users() {
   const [start, setStart] = useState(new Date().getTime());
 
   
-  const GETALLPOSTS = gql`
+  const GETALLUSERS = `
   query UsersAll {
     UsersAll {
       id
@@ -28,7 +27,10 @@ export default function Users() {
     }
   }
   `;
-  const { loading, error, data } = useQuery(GETALLPOSTS, {fetchPolicy:"no-cache"});
+  const [result, reexecuteQuery] = useQuery({
+    query: GETALLUSERS,
+  });
+  const { data, fetching, error } = result;
   
   useEffect(() => {
     if (data) {
@@ -50,7 +52,7 @@ export default function Users() {
         <Container>
           <Head1>Users ({data ? data.UsersAll.length : 0})</Head1>
           {error && <ErrorMessageBox />}
-          {loading && <LoadingMessageBox />}
+          {fetching && <LoadingMessageBox />}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mt-6">
             {data && data.UsersAll.length < 0 && (
               <ContentBox>No users found to display</ContentBox>
