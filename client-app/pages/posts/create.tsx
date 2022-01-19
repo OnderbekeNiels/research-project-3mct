@@ -1,6 +1,6 @@
-import { gql, useMutation } from "@apollo/client";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useMutation } from "urql";
 import ContentBox from "../../components/contentBox";
 import Container from "../../components/objects/container";
 import { Head1 } from "../../components/objects/head";
@@ -18,7 +18,7 @@ export default function CreatePost() {
     body: "Hope it works",
   });
 
-  const CREATEPOST = gql`
+  const CREATEPOST = `
     mutation CreatePost($data: PostInput!) {
       CreatePost(data: $data) {
         id
@@ -50,46 +50,45 @@ export default function CreatePost() {
     }
   `;
 
-  const [addPost, { data, error, loading }] = useMutation(CREATEPOST);
+  const [createPostResult, createPost] = useMutation(CREATEPOST);
 
   useEffect(() => {
-    if (data != undefined) {
-      console.log({ data });
-      router.push(`/posts/${data.CreatePost.id}`);
+    if (createPostResult.data != undefined) {
+      router.push(`/posts/${createPostResult.data.CreatePost.id}`);
     }
-  }, [data]);
+  }, [createPostResult.data]);
 
   return (
     <Row>
       <Container>
         <Head1>Create a post</Head1>
-        {error && (
+        {createPostResult.error && (
           <StatusBar
             level="error"
             message="Something went wrong while creating."
           />
         )}
-        {data && <StatusBar level="ok" message="Created succesfully" />}
+        {createPostResult.data && (
+          <StatusBar level="ok" message="Created succesfully" />
+        )}
         <ContentBox>
           <form
             action=""
             className="grid gap-6"
             onSubmit={(e) => {
               e.preventDefault();
-              addPost({
-                variables: {
-                  data: {
-                    body: post.body,
-                    creationDate: new Date().toISOString(),
-                    lastActivityDate: new Date().toISOString(),
-                    lastEditDate: new Date().toISOString(),
-                    ownerUserId: 1,
-                    postTypeId: 1,
-                    score: 2,
-                    title: post.title,
-                    viewCount: 0,
-                    votesCount: 0,
-                  },
+              createPost({
+                data: {
+                  body: post.body,
+                  creationDate: new Date().toISOString(),
+                  lastActivityDate: new Date().toISOString(),
+                  lastEditDate: new Date().toISOString(),
+                  ownerUserId: 1,
+                  postTypeId: 1,
+                  score: 2,
+                  title: post.title,
+                  viewCount: 0,
+                  votesCount: 0,
                 },
               });
             }}

@@ -1,7 +1,7 @@
-import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { isElectron } from "@firebase/util";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useMutation, useQuery } from "urql";
 import ContentBox from "../../../components/contentBox";
 import Container from "../../../components/objects/container";
 import { Head1 } from "../../../components/objects/head";
@@ -21,7 +21,7 @@ export default function () {
   const [post, setPost] = useState<EditPost>({ id: 0, title: "", body: "" });
   const [isEdited, setIsEdited] = useState<boolean>(false);
 
-  const GETPOSTBYID = gql`
+  const GETPOSTBYID = `
     query PostById($postId: Float!) {
       PostById(postId: $postId) {
         id
@@ -31,11 +31,14 @@ export default function () {
     }
   `;
 
-  const [getPostById, { loading, error, data }] = useLazyQuery(GETPOSTBYID, {
-    fetchPolicy: "no-cache",
+  const [result, reexecuteQuery] = useQuery({
+    query: GETPOSTBYID,
+    variables: { postId: +postId! },
+    pause: !postId,
   });
+  const { data, fetching, error } = result;
 
-  const UPDATEPOST = gql`
+  const UPDATEPOST = `
     mutation UpdatePost($data: PostUpdate!, $postId: Float!) {
       UpdatePost(data: $data, postId: $postId) {
         id
@@ -45,7 +48,7 @@ export default function () {
     }
   `;
 
-  const [updatePost, response] = useMutation(UPDATEPOST);
+  const [updatePostResult, updatePost] = useMutation(UPDATEPOST);
 
   useEffect(() => {
     if (data != undefined) {
@@ -53,24 +56,17 @@ export default function () {
     }
   }, [data]);
 
-  useEffect(() => {
-    if (postId)
-      getPostById({
-        variables: { postId: +postId },
-      });
-  }, [postId]);
-
   return (
     <Row>
       <Container>
         <Head1>Edit post {postId}</Head1>
-        {response.error && (
+        {updatePostResult.error && (
           <StatusBar
             level="error"
             message="Something went wrong while updating."
           />
         )}
-        {response.data && (
+        {updatePostResult.data && (
           <StatusBar level="ok" message="Updated succesfully." />
         )}
         <ContentBox>
@@ -80,13 +76,15 @@ export default function () {
             onSubmit={(e) => {
               e.preventDefault();
               updatePost({
-                variables: {
-                  postId: postId && +postId,
-                  data: {
-                    body: post.body,
-                    title: post.title,
-                  },
+                postId: postId && +postId,
+                data: {
+                  body: post.body,
+                  title: post.title,
                 },
+              }).then((result) => {
+                if (result.error) {
+                  console.error("Error", result.error);
+                }
               });
             }}
           >
