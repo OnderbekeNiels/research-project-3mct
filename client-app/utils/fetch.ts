@@ -1,5 +1,3 @@
-import { trace } from "firebase/performance";
-import { perf } from "./firebase";
 
 export enum RestMethodType {
   POST = "POST",
