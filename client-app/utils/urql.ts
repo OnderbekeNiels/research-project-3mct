@@ -1,10 +1,15 @@
 import { devtoolsExchange } from "@urql/devtools";
-import { createClient, defaultExchanges } from "urql";
+import {
+  cacheExchange,
+  createClient,
+  dedupExchange,
+  fetchExchange,
+} from "urql";
 
 const urqlClient = createClient({
   url: process.env.NEXT_PUBLIC_BACKEND_URL!,
-  exchanges: [devtoolsExchange, ...defaultExchanges],
-  requestPolicy: "network-only"
+  exchanges: [devtoolsExchange, dedupExchange, cacheExchange, fetchExchange],
+  // requestPolicy: "network-only",
 });
 
 export default urqlClient;
