@@ -2,7 +2,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { textState } from "../../utils/store";
 import Container from "./container";
 
 const convertToPathArr = (path: string): string[] => {
