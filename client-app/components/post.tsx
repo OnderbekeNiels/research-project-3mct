@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMutation } from "urql";
 import UserType, { Anonymous } from "../models/user";
 import createMarkup from "../utils/core";
@@ -51,19 +51,12 @@ export default function Post({
     );
     deletePost({
       postId: +post.id,
-      // update(cache) {
-      //   const normalizedId = cache.identify({
-      //     id: post.id,
-      //     __typename: "Post",
-      //   });
-      //   cache.evict({ id: normalizedId });
-      // },
     });
   };
 
-  // useEffect(() => {
-  //   if (data) router.back();
-  // }, [data]);
+  useEffect(() => {
+    if (deletePostResult.data && detailMode) router.back();
+  }, [deletePostResult.data]);
 
   return (
     <ContentBox
