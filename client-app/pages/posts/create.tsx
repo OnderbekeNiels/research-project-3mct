@@ -1,5 +1,5 @@
 import { gql, useMutation } from "@apollo/client";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import ContentBox from "../../components/contentBox";
 import Container from "../../components/objects/container";

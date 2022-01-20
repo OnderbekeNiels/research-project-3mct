@@ -1,5 +1,5 @@
 import { gql, useQuery } from "@apollo/client";
-import React, { Profiler, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import ContentBox from "../../components/contentBox";
 import ErrorMessageBox from "../../components/errorMessageBox";
@@ -9,7 +9,6 @@ import { Head1 } from "../../components/objects/head";
 import Row from "../../components/objects/row";
 import User from "../../components/user";
 import UserType from "../../models/user";
-import { query } from "../../utils/fetch";
 import { requestState } from "../../utils/store";
 
 export default function Users() {
