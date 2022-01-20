@@ -66,6 +66,7 @@ export default function UserDetail() {
        query: GETUSERBYID,
        variables: { userId: +userId! },
        pause: !userId,
+       requestPolicy: "cache-and-network"
      });
      const { data, fetching, error } = result;
 

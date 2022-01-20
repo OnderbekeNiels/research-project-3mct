@@ -50,7 +50,7 @@ export default function Post({
       `Are you sure you want to delete post with title "${post.title}"`
     );
     deletePost({
-      postId: +post.id
+      postId: +post.id,
       // update(cache) {
       //   const normalizedId = cache.identify({
       //     id: post.id,
