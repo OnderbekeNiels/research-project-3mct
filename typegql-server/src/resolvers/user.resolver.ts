@@ -26,16 +26,10 @@ export class UserResolver {
 
   @Query(() => [User])
   async UsersAll(@Ctx() ctx: any) {
-    const users = await checkCache(ctx.redisClient, "allusers", async () => {
-      console.log("executed")
-      // ! works, if calculate response headers is set to false
-      ctx.res.set(
-        "cache-control",
-        "stale-while-revalidate=3600, public"
-      );
-      return await this.userService.all();
-    });
-    return users;
+    // ! works, if calculate response headers is set to false
+    ctx.res.set("cache-control", "stale-while-revalidate=3600, public");
+
+    return await this.userService.all();
   }
 
   @Query(() => User)
@@ -46,13 +40,10 @@ export class UserResolver {
       async () => {
         return await this.userService.findById(userId);
       }
-      );
-      //! works against cache busting
-      ctx.res.set(
-        "cache-control",
-        "stale-while-revalidate=40, public"
-      );
-      return user;
+    );
+    //! works against cache busting
+    ctx.res.set("cache-control", "stale-while-revalidate=40, public");
+    return user;
   }
 
   @FieldResolver()

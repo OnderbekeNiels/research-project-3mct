@@ -41,7 +41,9 @@ useContainer(Container);
         ApolloServerPluginCacheControl({
           // Cache everything for 1 hour by default.
           defaultMaxAge: 3600,
-          // Send the `cache-control` response header.
+          // Send the `cache-control` response header. 
+          // True => use directives & calculate for me
+          // False => don't calculate, i will use my own cache-control headers
           calculateHttpHeaders: false,
         }),
       ],
