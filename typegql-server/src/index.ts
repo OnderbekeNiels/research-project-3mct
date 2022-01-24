@@ -13,14 +13,11 @@ import { UserResolver } from "./resolvers/user.resolver";
 import { Container } from "typedi";
 import { CommentResolver } from "./resolvers/comment.resolver";
 import { PostResolver } from "./resolvers/post.resolver";
-import responseCachePlugin from "apollo-server-plugin-response-cache";
 import { User } from "./entity/Users";
 import { ApolloServerPluginCacheControl } from "apollo-server-core";
-import { BaseRedisCache } from "apollo-server-cache-redis";
 import { logger } from "./utils/logger";
 import { Response } from "express";
 import cors = require("cors");
-const Redis = require("ioredis");
 
 useContainer(Container);
 
@@ -37,20 +34,9 @@ useContainer(Container);
   // todo: redis password as env
   const apolloServer = new ApolloServer({
     schema,
-      plugins: [
-        ApolloServerPluginCacheControl({
-          // Cache everything for 1 hour by default.
-          defaultMaxAge: 3600,
-          // Send the `cache-control` response header.
-          calculateHttpHeaders: true,
-        }),
-      ],
     context: ({ req, res }) => ({
       req,
       res,
-      redisClient: new Redis({
-        password: "mqsdfhmjkjKJFapaekrJqq",
-      }),
     }),
   });
 

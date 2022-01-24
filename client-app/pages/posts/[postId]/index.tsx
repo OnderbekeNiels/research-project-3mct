@@ -54,7 +54,6 @@ export default function PostDetail() {
   const { loading, error, data } = useQuery(GETPOSTBYID, {
     variables: { postId: postId  ? +postId : undefined}, 
     fetchPolicy: "no-cache",
-  
   });
 
 

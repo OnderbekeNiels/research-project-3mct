@@ -60,9 +60,7 @@ PostsAll {
       }
     }
   `;
-  const { loading, error, data } = useQuery(GETALLPOSTS, {
-    
-  });
+  const { loading, error, data } = useQuery(GETALLPOSTS);
 
   // ! Lifecycle
 
