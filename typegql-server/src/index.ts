@@ -50,9 +50,6 @@ useContainer(Container);
     context: ({ req, res }) => ({
       req,
       res,
-      redisClient: new Redis({
-        password: "mqsdfhmjkjKJFapaekrJqq",
-      }),
     }),
   });
 

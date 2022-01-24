@@ -7,7 +7,6 @@ import { CommentService } from "../services/comment.service";
 import { PostService } from "../services/posts.service";
 import { UserService } from "../services/user.service";
 import { CacheControl } from "../cache-control";
-import { checkCache } from "../utils/redis";
 
 @Service()
 @Resolver(() => User)
@@ -19,10 +18,6 @@ export class UserResolver {
     private readonly postService: PostService
   ) {}
 
-  // @Query(() => [User])
-  // async UsersAll(@Ctx() ctx: any) {
-  //   return await this.userService.all();
-  // }
 
   @Query(() => [User])
   async UsersAll(@Ctx() ctx: any) {
@@ -34,81 +29,36 @@ export class UserResolver {
 
   @Query(() => User)
   async UserById(@Arg("userId") userId: number, @Ctx() ctx: any) {
-    const user = await checkCache(
-      ctx.redisClient,
-      `user-${userId}`,
-      async () => {
-        return await this.userService.findById(userId);
-      }
-    );
     //! works against cache busting
     ctx.res.set("cache-control", "stale-while-revalidate=40, public");
-    return user;
+    return await this.userService.findById(userId);
   }
 
   @FieldResolver()
   async badges(@Root() user: User, @Ctx() ctx: any) {
-    const badges = await checkCache(
-      ctx.redisClient,
-      `badges-from-user-${user.id}`,
-
-      async () => {
-        return await this.badgeService.findAllByArgs({
-          userId: user.id,
-          take: 20,
-        });
-      }
-    );
-    return badges;
+    return await this.badgeService.findAllByArgs({
+      userId: user.id,
+      take: 20,
+    });
   }
 
-  // @FieldResolver()
-  // async comments(@Root() user: User, @Ctx() ctx: any) {
-  //   return await this.commentService.findAllByArgs({
-  //     userId: user.id,
-  //     take: 10,
-  //   });
-  // }
 
   @FieldResolver()
   async comments(@Root() user: User, @Ctx() ctx: any) {
-    const comments = await checkCache(
-      ctx.redisClient,
-      `comments-from-user-${user.id}`,
-      async () => {
-        return await this.commentService.findAllByArgs({
-          userId: user.id,
-          take: 10,
-        });
-      }
-    );
-    return comments;
+    return await this.commentService.findAllByArgs({
+      userId: user.id,
+      take: 10,
+    });
   }
-
-  // @FieldResolver()
-  // async posts(@Root() user: User, @Ctx() ctx: any) {
-  //   return await await this.postService.findAllByArgs({
-  //     userId: user.id,
-  //     take: 10,
-  //   });
-  // }
 
   @FieldResolver()
   async posts(@Root() user: User, @Ctx() ctx: any) {
-    const posts = await checkCache(
-      ctx.redisClient,
-      `posts-from-user-${user.id}`,
-
-      async () => {
-        return await this.postService.findAllByArgs({
-          where: { ownerUserId: user.id },
-          take: 10,
-          order: {
-            lastEditDate: "DESC",
-          },
-        });
-      }
-    );
-    return posts;
+    return await this.postService.findAllByArgs({
+      where: { ownerUserId: user.id },
+      take: 10,
+      order: {
+        lastEditDate: "DESC",
+      },
+    });
   }
 }

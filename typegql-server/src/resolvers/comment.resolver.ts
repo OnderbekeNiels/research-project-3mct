@@ -4,8 +4,6 @@ import { Comment } from "../entity/Comments";
 import { CommentService } from "../services/comment.service";
 import { PostService } from "../services/posts.service";
 import { UserService } from "../services/user.service";
-import { checkCache } from "../utils/redis";
-
 
 @Service()
 @Resolver(() => Comment)
@@ -26,20 +24,8 @@ export class CommentResolver {
     return await this.postService.findById(comment.postId);
   }
 
-//   @FieldResolver()
-//   async user(@Root() comment: Comment, @Ctx() ctx: any) {
-// return await this.userService.findByArgs(comment.userId);
-//   }
-
   @FieldResolver()
   async user(@Root() comment: Comment, @Ctx() ctx: any) {
-    const user = await checkCache(
-      ctx.redisClient,
-      `user-${comment.userId}`,
-      async () => {
-        return await this.userService.findByArgs(comment.userId);
-      }
-    );
-    return user;
+    return await this.userService.findByArgs(comment.userId);
   }
 }
