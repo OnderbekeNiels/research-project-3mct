@@ -1,5 +1,4 @@
-import { gql, useLazyQuery, useQuery } from "@apollo/client";
-import { trace } from "firebase/performance";
+import { gql, useLazyQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";

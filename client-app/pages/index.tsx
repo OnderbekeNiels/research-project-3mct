@@ -21,31 +21,26 @@ export default function Home() {
           <ul className="mb-6 list-disc ml-6">
             <li className="">
               <Link href="https://www.apollographql.com/docs/react/caching/cache-configuration/">
-                Apollo Client: Memory caching
+                InMemory caching with Apollo Client v3
               </Link>
             </li>
             <li>
-              <Link href="https://relay.dev/">Relay</Link>
+              <Link href="https://formidable.com/open-source/urql/">Urql</Link>
             </li>
           </ul>
           <Head2>Server side</Head2>
           <ul className="mb-6 list-disc ml-6">
             <li>
-              <Link href="https://redis.io/">Memory cache: REDIS</Link>
+              <Link href="https://redis.io/">Memory response caching using Redis</Link>
             </li>
             <li>
               <Link href="https://www.apollographql.com/docs/apollo-server/performance/caching/">
-                Apollo Server: Caching directives + Persisted Queries = HTTP
-                caching
+                HTTP caching using Apollo Server and Automatic Persisted Queries
               </Link>
             </li>
           </ul>
           <Head2>CDN</Head2>
           <ul className="mb-6 list-disc ml-6">
-            <li>
-              Apollo Server: Caching directives + Persisted Queries = HTTP
-              caching &gt; can extend to CDN
-            </li>
             <li>
               <Link href="https://graphcdn.io/">GraphCDN</Link>
             </li>

@@ -4,7 +4,6 @@ import { Badge } from "./Badges";
 import { Comment } from "./Comments";
 import { Post } from "./Posts";
 
-// @Directive("@cacheControl(maxAge: 5)")
 @Index("PK_Users_Id", ["id"], { unique: true })
 @ObjectType()
 @Entity("Users", { schema: "dbo" }) 
