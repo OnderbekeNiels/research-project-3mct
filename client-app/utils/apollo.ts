@@ -3,7 +3,7 @@ import { createPersistedQueryLink } from "@apollo/client/link/persisted-queries"
 import { sha256 } from "crypto-hash";
 
 const linkChain = createPersistedQueryLink({ sha256, useGETForHashedQueries: true }).concat(
-  new HttpLink({ uri: "http://localhost:4000/graphql" })
+  new HttpLink({ uri: process.env.NEXT_PUBLIC_BACKEND_URL })
 );
 
 const client = new ApolloClient({

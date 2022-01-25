@@ -36,7 +36,5 @@ services:
     build:
       context: ./client-app
       dockerfile: Dockerfile
-    env_file:
-      - ./client-app/docker.env
     ports:
       - 3000:3000
