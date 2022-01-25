@@ -1,24 +1,19 @@
 import "reflect-metadata";
-import { ApolloServer, gql } from "apollo-server-express";
-import * as Express from "express";
-import { buildSchema, Resolver, Query } from "type-graphql";
+import { ApolloServer } from "apollo-server-express";
+import express from "express";
+import { buildSchema } from "type-graphql";
 import {
   ConnectionOptions,
   createConnection,
   getConnectionOptions,
-  getRepository,
   useContainer,
 } from "typeorm";
 import { UserResolver } from "./resolvers/user.resolver";
 import { Container } from "typedi";
 import { CommentResolver } from "./resolvers/comment.resolver";
 import { PostResolver } from "./resolvers/post.resolver";
-import responseCachePlugin from "apollo-server-plugin-response-cache";
-import { User } from "./entity/Users";
 import { ApolloServerPluginCacheControl } from "apollo-server-core";
-import { BaseRedisCache } from "apollo-server-cache-redis";
 import { logger } from "./utils/logger";
-import { Response } from "express";
 import cors = require("cors");
 const Redis = require("ioredis");
 
@@ -49,13 +44,14 @@ useContainer(Container);
       req,
       res,
       redisClient: new Redis({
-        password: "mqsdfhmjkjKJFapaekrJqq",
+        host: "redis",
+        password: process.env.REDIS_PASSWORD,
       }),
     }),
   });
 
   // bron: https://gist.github.com/benawad/7abb41c179b050b476fdad4e5a561161
-  const app = Express();
+  const app = express();
 
   app.use(cors());
 
