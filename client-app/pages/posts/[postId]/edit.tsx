@@ -1,5 +1,4 @@
 import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
-import { isElectron } from "@firebase/util";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import ContentBox from "../../../components/contentBox";

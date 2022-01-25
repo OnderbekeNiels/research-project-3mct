@@ -3,7 +3,6 @@ import "../styles/globals.css";
 import Layout from "../components/objects/layout";
 
 import type { AppProps } from "next/app";
-import app from "../utils/firebase";
 import { atom, RecoilRoot } from "recoil";
 import React from "react";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";

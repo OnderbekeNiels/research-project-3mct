@@ -7,8 +7,6 @@ import Header from "../../components/objects/header";
 import Row from "../../components/objects/row";
 import Post, { PostArgs } from "../../components/post";
 import PostType from "../../models/post";
-import { query } from "../../utils/fetch";
-import { perf } from "../../utils/firebase";
 import ErrorMessageBox from "../../components/errorMessageBox";
 import LoadingMessageBox from "../../components/loadingMessageBox";
 import { useRecoilState } from "recoil";
