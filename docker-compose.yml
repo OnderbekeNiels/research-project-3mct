@@ -1,22 +1,40 @@
-version: '3.4'
+version: "3.4"
 
 services:
-
-  MSSQLServer:
+  mssqldb:
     image: mcr.microsoft.com/azure-sql-edge
     ports:
       - "1433:1433"
     env_file:
       - .env
-    volumes: 
+    volumes:
       - ./../stackoverflowdb:/var/opt/mssql/data
 
-  redisServer:
-    image: redis:6.2-alpine
+  # Only needed on redis branch
+  # redis:
+  #   image: redis:6.2-alpine
+  #   ports:
+  #     - "6379:6379"
+  #   command: redis-server --save 20 1 --loglevel warning --requirepass mqsdfhmjkjKJFapaekrJqq
+  #   volumes:
+  #     - ./redis-cache:/data
+
+  api-server-express:
+    # restart always because db needs some time to start connectons
+    restart: always
+    build:
+      context: ./typegql-server
+      dockerfile: Dockerfile
+    env_file:
+      - ./typegql-server/docker.ormconfig.env
     ports:
-      - "6379:6379"
-    command: redis-server --save 20 1 --loglevel warning --requirepass mqsdfhmjkjKJFapaekrJqq
-    volumes: 
-      - ./redis-cache:/data
+      - 4000:4000
+    depends_on:
+      - mssqldb
 
-
+  # client-server-next:
+  #   build:
+  #     context: ./client-app
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 3000:3000

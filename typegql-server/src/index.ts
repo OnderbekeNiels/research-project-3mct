@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { ApolloServer, gql } from "apollo-server-express";
-import * as Express from "express";
+import express from "express";
 import { buildSchema, Resolver, Query } from "type-graphql";
 import {
   ConnectionOptions,
@@ -41,7 +41,7 @@ useContainer(Container);
   });
 
   // bron: https://gist.github.com/benawad/7abb41c179b050b476fdad4e5a561161
-  const app = Express();
+  const app = express();
 
   app.use(cors());
 
