@@ -50,4 +50,4 @@ Frontend: React.js
 - Frontend app in React.js om de client-side caching te gaan testen.
 - Vergelijking van de caching strategieën met hun voor- en nadelen.
 - Performance (snelheid) meet resultaten van grote complexe queries in de verschillende startegiën.
-- Handleiding voor zowel client-side en server-side caching te gaan op zetten in de beste gevonden omgeving .
+- Handleiding voor zowel client-side en server-side caching te gaan op zetten in de beste gevonden omgeving.

@@ -36,9 +36,9 @@ services:
       - redis
       - mssqldb
 
-  # client-server-next:
-  #   build:
-  #     context: ./client-app
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - 3000:3000
+  client-server-next:
+    build:
+      context: ./client-app
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
