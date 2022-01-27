@@ -14,8 +14,8 @@ export default function CreatePost() {
   }
   const router = useRouter();
   const [post, setPost] = useState<CreatePost>({
-    title: "I tried this mutation....",
-    body: "Hope it works",
+    title: "T want to parse a JSON to byte array.",
+    body: "This is my code in JS but it keeps throwing this weird error: ",
   });
 
   const CREATEPOST = gql`
