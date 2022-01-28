@@ -47,6 +47,10 @@ export class PostResolver {
 
   @FieldResolver()
   async comments(@Root() post: Post, @Ctx() ctx: any) {
+    // ctx.res.set(
+    //   "cache-control",
+    //   "max-age=31, stale-while-revalidate=40, public"
+    // );
     return await this.commentService.findAllByArgs({
       where: { postId: post.id },
     });

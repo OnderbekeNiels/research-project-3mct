@@ -18,7 +18,6 @@ export class UserResolver {
     private readonly postService: PostService
   ) {}
 
-
   @Query(() => [User])
   async UsersAll(@Ctx() ctx: any) {
     // ! works, if calculate response headers is set to false
@@ -30,7 +29,10 @@ export class UserResolver {
   @Query(() => User)
   async UserById(@Arg("userId") userId: number, @Ctx() ctx: any) {
     //! works against cache busting
-    ctx.res.set("cache-control", "stale-while-revalidate=40, public");
+    ctx.res.set(
+      "cache-control",
+      "max-age=20, stale-while-revalidate=40, public"
+    );
     return await this.userService.findById(userId);
   }
 
@@ -42,7 +44,6 @@ export class UserResolver {
     });
   }
 
-
   @FieldResolver()
   async comments(@Root() user: User, @Ctx() ctx: any) {
     return await this.commentService.findAllByArgs({
@@ -53,6 +54,10 @@ export class UserResolver {
 
   @FieldResolver()
   async posts(@Root() user: User, @Ctx() ctx: any) {
+    // ctx.res.set(
+    //   "cache-control",
+    //   "max-age=30, stale-while-revalidate=40, public"
+    // );
     return await this.postService.findAllByArgs({
       where: { ownerUserId: user.id },
       take: 10,
