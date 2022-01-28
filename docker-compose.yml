@@ -19,18 +19,18 @@ services:
   #   volumes:
   #     - ./redis-cache:/data
 
-  api-server-express:
-    # restart always because db needs some time to start connectons
-    restart: always
-    build:
-      context: ./typegql-server
-      dockerfile: Dockerfile
-    env_file:
-      - ./typegql-server/docker.ormconfig.env
-    ports:
-      - 4000:4000
-    depends_on:
-      - mssqldb
+  # api-server-express:
+  #   # restart always because db needs some time to start connectons
+  #   restart: always
+  #   build:
+  #     context: ./typegql-server
+  #     dockerfile: Dockerfile
+  #   env_file:
+  #     - ./typegql-server/docker.ormconfig.env
+  #   ports:
+  #     - 4000:4000
+  #   depends_on:
+  #     - mssqldb
 
   # client-server-next:
   #   build:
