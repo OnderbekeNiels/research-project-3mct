@@ -61,7 +61,7 @@ export default function UserDetail() {
       }
     }
   `;
-  const [getUserById, { loading, error, data }] = useLazyQuery(GETUSERBYID, {fetchPolicy: "cache-and-network"});
+  const [getUserById, { loading, error, data }] = useLazyQuery(GETUSERBYID, {fetchPolicy: "cache-first"});
 
   useEffect(() => {
     console.log({data})
