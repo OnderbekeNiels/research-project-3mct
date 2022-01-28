@@ -1,4 +1,4 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
@@ -51,9 +51,8 @@ export default function PostDetail() {
     }
   }
 }`;
-  const { loading, error, data } = useQuery(GETPOSTBYID, {
+  const [getPostById, { loading, error, data }] = useLazyQuery(GETPOSTBYID, {
     variables: { postId: postId  ? +postId : undefined}, 
-    fetchPolicy: "no-cache",
   });
 
 
@@ -72,6 +71,12 @@ export default function PostDetail() {
     }
   }, [data]);
 
+    useEffect(() => {
+      if (postId)
+        getPostById({
+          variables: { postId: postId ? +postId : undefined },
+        });
+    }, [postId]);
 
   return (
     <>
